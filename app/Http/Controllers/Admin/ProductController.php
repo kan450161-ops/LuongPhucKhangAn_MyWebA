@@ -62,4 +62,14 @@ class ProductController extends Controller
     {
         return"Delete Product with id: $id";
     }
+
+    public function test1()
+    {
+        return redirect()->route('admin.home');
+    }
+
+    public function test2()
+    {
+        return redirect('/admin/dashboard');
+    }
 }

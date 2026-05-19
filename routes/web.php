@@ -35,6 +35,9 @@ Route::post('/admin/product/store', [ProductController::class, 'store']);
 Route::get('/admin/product/edit/{id}', [ProductController::class, 'edit']);
 Route::put('/admin/product/{id}', [ProductController::class, 'update']);
 Route::delete('/admin/product/{id}', [ProductController::class, 'destroy']);
+// test
+Route::get('/test1', [ProductController::class, 'test1']);
+Route::get('/test2', [ProductController::class, 'test2']);
 
 
 // ================= POST =================
@@ -62,3 +65,8 @@ Route::post('/admin/user/store', [UserController::class, 'store']);
 Route::get('/admin/user/edit/{id}', [UserController::class, 'edit']);
 Route::put('/admin/user/{id}', [UserController::class, 'update']);
 Route::delete('/admin/user/{id}', [UserController::class, 'destroy']);
+
+// ================= DASHBOARD =================
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.home');
