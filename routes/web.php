@@ -20,6 +20,9 @@ Route::get('/demo5/{id?}',[DemoController::class,'index5']);
 Route::get('/demo6/{parram1}/{parram2}',[DemoController::class,'index6']);
 
 // ================= CATEGORY =================
+Route::prefix('admin')->group(function () {
+    Route::resource('category', CategoryController::class);
+});
 Route::get('/admin/category', [CategoryController::class, 'index']);
 Route::get('/admin/category/create', [CategoryController::class, 'create']);
 Route::post('/admin/category/store', [CategoryController::class, 'store']);
@@ -70,3 +73,9 @@ Route::delete('/admin/user/{id}', [UserController::class, 'destroy']);
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.home');
+
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.home');
+});
