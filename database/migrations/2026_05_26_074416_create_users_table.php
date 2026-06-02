@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('fullname',100);
             $table->string('username',30)-> unique();
             $table->string('email',50)-> unique();
-            $table->string('password',50);
+            $table->string('password',255);
             $table->string('phone',20)-> nullable();
             $table->string('address',255)-> nullable();
             $table->tinyInteger('gender')-> default(0);
