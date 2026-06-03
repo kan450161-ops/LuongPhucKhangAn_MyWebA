@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class CategoryController extends Controller
 {
@@ -12,7 +14,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return"Hello Category";
+       $list = DB::table('categories')
+        ->select('cateid','catename','slug','image','status') //Chỉ lấy các cột cần thiết
+        ->where('status',1) //Chỉ lấy các loại sản phẩm đang hoạt động
+        ->orderBy('catename') // Sắp xếp dữ liệu theo cột catename theo thứ tự tăng dần
+        ->get(); //Lấy tất cả dữ liệu thỏa mãn điều kiện
+       return view('admin.categories.index', compact('list'));
     }
 
     /**
@@ -20,7 +27,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return"Create Category";
+        return view('admin.categories.create');
     }
 
     /**
@@ -28,7 +35,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        return"Store Category";
+        DB::table('categories')->insert([
+            'catename' => $request->catename,
+            'slug' => $request->slug
+        ]);
+
+        return redirect()->route('admin.categories.index');
     }
 
     /**
@@ -52,7 +64,14 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        return"Update Category with id: $id";
+        DB::table('categories') //Truy cập vào bảng categories
+            ->where('cateid', $id)
+            ->update([
+                'catename' => $request->catename,
+                'slug' => $request->slug
+            ]);
+
+        return redirect()->route('admin.categories.index');
     }
 
     /**
@@ -60,6 +79,11 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        return"Delete Category with id: $id";
+         DB::table('categories')
+            ->where('cateid', $id)
+            ->delete();
+
+        return redirect()->route('admin.categories.index');
     }
+   
 }

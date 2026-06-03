@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class ProductController extends Controller
 {
@@ -12,7 +14,29 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return"Hello Product";
+        // $list = DB::table('products')
+        //     ->select('id','productname','slug','image','status') //Chỉ lấy các cột cần thiết
+        //     ->where('status',1) //Chỉ lấy các loại sản phẩm đang hoạt động
+        //     ->orderBy('productname') // Sắp xếp dữ liệu theo cột productname theo thứ tự tăng dần
+        //     ->get(); //Lấy tất cả dữ liệu thỏa mãn điều kiện
+       
+       $list = DB::table('products')
+            ->join('categories', 'products.cateid', '=', 'categories.cateid')
+            ->leftJoin('brands', 'products.brandid', '=', 'brands.id')
+            ->select(
+                'products.id',
+                'products.productname',
+                'products.price',
+                'products.slug',
+                'products.image',
+                'products.status',
+                'categories.catename',
+                'brands.brandname'
+            )
+            ->orderBy('products.productname', 'asc')
+            ->get();
+
+        return view('admin.products.index', compact('list'));
     }
 
     /**

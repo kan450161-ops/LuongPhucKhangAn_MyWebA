@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+
 
 class PostController extends Controller
 {
@@ -12,7 +14,26 @@ class PostController extends Controller
      */
     public function index()
     {
-        return"Hello Post";
+        // $list = DB::table('posts')
+        //     ->select('id','title','slug','content','image','status') //Chỉ lấy các cột cần thiết
+        //     ->where('status',1) //Chỉ lấy các loại sản phẩm đang hoạt động
+        //     ->orderBy('title') // Sắp xếp dữ liệu theo cột title theo thứ tự tăng dần
+        //     ->get(); //Lấy tất cả dữ liệu thỏa mãn
+        
+        $list = DB::table('posts')
+            ->join('users', 'posts.user_id', '=', 'users.userid')
+            ->select(
+                'posts.id',
+                'posts.title',
+                'posts.slug',
+                'posts.content',
+                'posts.image',
+                'posts.status',
+                'users.username'
+            )
+            ->orderBy('posts.title', 'asc')
+            ->get();
+        return view('admin.posts.index', compact('list'));
     }
 
     /**
