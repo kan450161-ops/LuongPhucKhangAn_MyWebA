@@ -46,28 +46,28 @@ Route::get('/test2', [ProductController::class, 'test2']);
 // ================= POST =================
 Route::get('/admin/posts', [PostController::class, 'index'])->name('admin.posts.index');
 Route::get('/admin/posts/create', [PostController::class, 'create'])->name('admin.posts.create');
-Route::post('/admin/posts/store', [PostController::class, 'store']);
+Route::post('/admin/posts/store', [PostController::class, 'store'])->name('admin.posts.store');
 Route::get('/admin/posts/edit/{id}', [PostController::class, 'edit'])->name('admin.posts.edit');
-Route::put('/admin/posts/{id}', [PostController::class, 'update']);
-Route::delete('/admin/posts/{id}', [PostController::class, 'destroy']);
+Route::put('/admin/posts/{id}', [PostController::class, 'update'])->name('admin.posts.update');
+Route::delete('/admin/posts/{id}', [PostController::class, 'destroy'])->name('admin.posts.destroy');
 
 
 // ================= BRAND =================
 Route::get('/admin/brand', [BrandController::class, 'index']) ->name('admin.brands.index');
 Route::get('/admin/brand/create', [BrandController::class, 'create']) ->name('admin.brands.create');
-Route::post('/admin/brand/store', [BrandController::class, 'store']);
+Route::post('/admin/brand/store', [BrandController::class, 'store'])->name('admin.brands.store');
 Route::get('/admin/brand/edit/{id}', [BrandController::class, 'edit']) ->name('admin.brands.edit');
-Route::put('/admin/brand/{id}', [BrandController::class, 'update']);
-Route::delete('/admin/brand/{id}', [BrandController::class, 'destroy']);
+Route::put('/admin/brand/{id}', [BrandController::class, 'update'])->name('admin.brands.update');
+Route::delete('/admin/brand/{id}', [BrandController::class, 'destroy'])->name('admin.brands.destroy');
 
 
 // ================= USER =================
 Route::get('/admin/user', [UserController::class, 'index']) ->name('admin.users.index');
 Route::get('/admin/user/create', [UserController::class, 'create']) ->name('admin.users.create');
-Route::post('/admin/user/store', [UserController::class, 'store']);
+Route::post('/admin/user/store', [UserController::class, 'store'])->name('admin.users.store');
 Route::get('/admin/user/edit/{id}', [UserController::class, 'edit']) ->name('admin.users.edit');
-Route::put('/admin/user/{id}', [UserController::class, 'update']);
-Route::delete('/admin/user/{id}', [UserController::class, 'destroy']);
+Route::put('/admin/user/{id}', [UserController::class, 'update'])->name('admin.users.update');
+Route::delete('/admin/user/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
 // ================= DASHBOARD =================
 Route::get('/admin/dashboard', function () {

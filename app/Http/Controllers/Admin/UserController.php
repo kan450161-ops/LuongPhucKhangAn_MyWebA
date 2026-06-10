@@ -5,18 +5,19 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($limit = 10)
     {
-        $list = DB::table('users')
-            ->select('userid', 'fullname', 'username', 'email', 'role', 'status')
+        $list = User::select('userid', 'fullname', 'username', 'email', 'role', 'status')
             ->orderBy('fullname')
-            ->get();
+            ->paginate($limit);
 
         return view('admin.users.index', compact('list'));
     }
@@ -26,7 +27,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return"Create User";
+        return view('admin.users.create');
     }
 
     /**
@@ -34,7 +35,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        return"Store User";
+        // $request->validate([
+        //     'fullname' => 'required|string|max:100',
+        //     'username' => 'required|string|max:30|unique:users,username',
+        //     'email' => 'required|email|unique:users,email',
+        //     'password' => 'required|string|min:6',
+        // ]);
+
+        User::create([
+            'fullname' => $request->fullname,
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return redirect()->route('admin.users.index');
     }
 
     /**

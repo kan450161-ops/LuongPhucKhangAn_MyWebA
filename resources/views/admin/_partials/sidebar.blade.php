@@ -38,7 +38,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('admin.categories.edit', ['id' => 1]) }}">
-                            Sửa loại sản phẩm
+                            + Sửa loại sản phẩm
                         </a>
                     </li>
                 </ul>
@@ -60,7 +60,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('admin.brands.create') }}">
-                            Thêm thương hiệu
+                            + Thêm thương hiệu
                         </a>
                     </li>
                 </ul>
@@ -82,7 +82,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('admin.users.create') }}">
-                            Thêm người dùng
+                            + Thêm người dùng
                         </a>
                     </li>
                 </ul>
@@ -102,15 +102,34 @@
                             Danh sách bài viết
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.posts.create') }}">
+                            + Thêm bài viết
+                        </a>
                 </ul>
             </div>
         </li>
         <!-- {{-- Quản lý sản phẩm --}} -->
         <li class="nav-item">
-            <a class="nav-link text-white" href="{{ route('admin.products.index') }}">
+            <a class="nav-link text-white" data-bs-toggle="collapse" href="#productMenu">
                 <i class="bi bi-box-seam"></i>
-                Sản phẩm
+                Quản lý sản phẩm
+                <i class="bi bi-chevron-down float-end"></i>
             </a>
+            <div class="collapse" id="productMenu">
+                <ul class="nav flex-column ms-3">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.products.index') }}">
+                            Danh sách sản phẩm
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.products.create') }}">
+                            + Thêm sản phẩm
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </li>
     </ul>
 </div>

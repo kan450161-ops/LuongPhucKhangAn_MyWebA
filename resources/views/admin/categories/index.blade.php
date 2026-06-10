@@ -20,7 +20,7 @@ tương ứng với @yield('content') trong layout -->
                     <th>Tên loại</th>
                     <th>Slug</th>
                     <th>Trạng thái</th>
-                    <th>Chức Năng</th>
+                    <th>Hành động</th>
                 </tr>
             </thead>
 
@@ -54,6 +54,9 @@ tương ứng với @yield('content') trong layout -->
             @endforeach
         </tbody>
     </table>
-
+    <div class="d-flex justify-content-center">
+        {{ $list->links() }}
+    </div>
+   
 @endsection
 

@@ -11,6 +11,7 @@
                 <th>STT</th>
                 <th>Ảnh đại diện</th>
                 <th>Tên bài viết</th>
+                <th>Người đăng</th>
                 <th>Nội dung</th>
                 <th>Slug</th>
                 <th>Trạng thái</th>
@@ -25,6 +26,7 @@
                         alt="Logo" class="img-thumbnail" style="width: 72px; height: 72px; object-fit: cover;">
                     </td><!--//Nếu có ảnh thì hiển thị ảnh, nếu không có thì hiển thị ảnh mặc định -->
                     <td>{{ $item->title }}</td>
+                    <td>{{ $item->user->username ?? '—' }}</td>
                     <td>{{ Str::limit($item->content, 100) }}</td>
                     <td>{{ $item->slug }}</td>
                     <td>
@@ -38,5 +40,7 @@
             @endforeach
         </tbody>
     </table>
-
+    <div class="d-flex justify-content-center">
+        {{ $list->links() }}
+    </div>
 @endsection

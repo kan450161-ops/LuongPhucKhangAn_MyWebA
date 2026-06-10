@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -12,14 +13,21 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($limit = 10)
     {
-       $list = DB::table('categories')
-        ->select('cateid','catename','slug','image','status') //Chỉ lấy các cột cần thiết
-        ->where('status',1) //Chỉ lấy các loại sản phẩm đang hoạt động
-        ->orderBy('catename') // Sắp xếp dữ liệu theo cột catename theo thứ tự tăng dần
-        ->get(); //Lấy tất cả dữ liệu thỏa mãn điều kiện
-       return view('admin.categories.index', compact('list'));
+    //    $list = DB::table('categories')
+    //     ->select('cateid','catename','slug','image','status') //Chỉ lấy các cột cần thiết
+    //     ->where('status',1) //Chỉ lấy các loại sản phẩm đang hoạt động
+    //     ->orderBy('catename') // Sắp xếp dữ liệu theo cột catename theo thứ tự tăng dần
+    //     ->get(); //Lấy tất cả dữ liệu thỏa mãn điều kiện
+    // == Query Builder ==
+
+        $list = Category::select('cateid','catename','slug','image','status') //Chỉ lấy các cột cần thiết
+            ->orderBy('catename') // Sắp xếp dữ liệu theo cột catename theo thứ tự tăng dần
+            ->paginate($limit);
+
+
+        return view('admin.categories.index', compact('list'));
     }
 
     /**
@@ -35,7 +43,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        DB::table('categories')->insert([
+        Category::create([
             'catename' => $request->catename,
             'slug' => $request->slug
         ]);

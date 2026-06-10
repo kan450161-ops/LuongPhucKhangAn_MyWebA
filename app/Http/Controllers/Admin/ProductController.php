@@ -5,36 +5,59 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\Product;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($limit = 10)
     {
         // $list = DB::table('products')
         //     ->select('id','productname','slug','image','status') //Chỉ lấy các cột cần thiết
         //     ->where('status',1) //Chỉ lấy các loại sản phẩm đang hoạt động
         //     ->orderBy('productname') // Sắp xếp dữ liệu theo cột productname theo thứ tự tăng dần
         //     ->get(); //Lấy tất cả dữ liệu thỏa mãn điều kiện
-       
-       $list = DB::table('products')
-            ->join('categories', 'products.cateid', '=', 'categories.cateid')
-            ->leftJoin('brands', 'products.brandid', '=', 'brands.id')
-            ->select(
-                'products.id',
-                'products.productname',
-                'products.price',
-                'products.slug',
-                'products.image',
-                'products.status',
-                'categories.catename',
-                'brands.brandname'
-            )
-            ->orderBy('products.productname', 'asc')
-            ->get();
+
+        //    $list = DB::table('products')
+        //         ->join('categories', 'products.cateid', '=', 'categories.cateid')
+        //         ->leftJoin('brands', 'products.brandid', '=', 'brands.id')
+        //         ->select(
+        //             'products.id',
+        //             'products.productname',
+        //             'products.price',
+        //             'products.slug',
+        //             'products.image',
+        //             'products.status',
+        //             'categories.catename',
+        //             'brands.brandname'
+        //         )
+        //         ->orderBy('products.productname', 'asc')
+        //         ->get();
+
+        // $list = Product::select(
+        //     'products.id',
+        //     'products.productname',
+        //     'products.price',
+        //     'products.slug',
+        //     'products.image',
+        //     'products.status',
+        //     'categories.catename',
+        //     'brands.brandname'
+        // )
+        // ->join('categories', 'products.cateid', '=', 'categories.cateid')
+        // ->leftJoin('brands', 'products.brandid', '=', 'brands.id')
+        // ->orderBy('products.productname', 'asc')
+        // ->paginate($limit);
+
+        $list = Product::with([
+            'category:cateid,catename',
+            'brand:id,brandname'
+        ])
+        ->select('id','productname','price','slug','image','status','cateid','brandid')
+        ->orderBy('productname')
+        ->paginate($limit);
 
         return view('admin.products.index', compact('list'));
     }
@@ -44,7 +67,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return"Create Product";
+        return view('admin.products.create');
     }
 
     /**
@@ -52,7 +75,12 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        return"Store Product";
+        Product::create([
+            'productname' => $request->productname,
+            'slug' => $request->slug
+        ]);
+
+        return redirect()->route('admin.products.index');
     }
 
     /**
