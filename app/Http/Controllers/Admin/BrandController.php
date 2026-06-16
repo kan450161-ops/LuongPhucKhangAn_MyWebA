@@ -37,7 +37,13 @@ class BrandController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+    {   
+        // query builder
+        // DB::table('brands')->insert([
+        //     'brandname' => $request->brandname,
+        //     'slug' => $request->slug
+        // ]);
+        // Eloquent ORM
         Brand::create([
             'brandname' => $request->brandname,
             'slug' => $request->slug

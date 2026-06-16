@@ -13,7 +13,7 @@ class Brand extends Model
 
     // chỉ định khóa chính
     // có thể bỏ qua khai báo $primaryKey nếu primary key là id
-    protected $primaryKey = 'brandid';
+    protected $primaryKey = 'id';
 
     // các cột cho phép thêm/sửa dữ liệu hàng loạt
     protected $fillable = [

@@ -33,7 +33,7 @@ class ProductController extends Controller
         //             'categories.catename',
         //             'brands.brandname'
         //         )
-        //         ->orderBy('products.productname', 'asc')
+        //         ->orderBy('products.productname')
         //         ->get();
 
         // $list = Product::select(

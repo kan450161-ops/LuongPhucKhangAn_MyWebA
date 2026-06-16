@@ -4,6 +4,9 @@
 
 @section('content')
 <h2 class="mb-3">Danh Sách Bài Viết</h2>
+    <a href="{{ route('admin.posts.create') }}" class="btn btn-success mb-3">
+        + Thêm bài viết
+    </a>
 
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">

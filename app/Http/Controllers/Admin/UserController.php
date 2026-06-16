@@ -35,13 +35,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'fullname' => 'required|string|max:100',
-        //     'username' => 'required|string|max:30|unique:users,username',
-        //     'email' => 'required|email|unique:users,email',
-        //     'password' => 'required|string|min:6',
+        // query builder
+        // DB::table('users')->insert([
+        //     'fullname' => $request->fullname,
+        //     'username' => $request->username,
+        //     'email' => $request->email,
+        //     'password' => Hash::make($request->password),
         // ]);
-
+        // Eloquent ORM
         User::create([
             'fullname' => $request->fullname,
             'username' => $request->username,

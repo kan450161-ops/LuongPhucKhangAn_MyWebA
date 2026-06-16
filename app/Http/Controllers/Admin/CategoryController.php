@@ -43,6 +43,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        //query builder
+        // DB::table('categories')->insert([
+        //     'catename' => $request->catename,
+        //     'slug' => $request->slug
+        // ]);
+        // Eloquent ORM
         Category::create([
             'catename' => $request->catename,
             'slug' => $request->slug

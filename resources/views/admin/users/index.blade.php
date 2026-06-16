@@ -4,7 +4,9 @@
 
 @section('content')
     <h2 class="mb-3">Danh Sách Người Dùng</h2>
-
+    <a href="{{ route('admin.users.create') }}" class="btn btn-success mb-3">
+        + Thêm người dùng
+    </a>
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">
             <tr>
@@ -15,6 +17,7 @@
                 <th>Email</th>
                 <th>Vai trò</th>
                 <th>Trạng thái</th>
+                <th width="150">Thao tác</th>
             </tr>
         </thead>
         <tbody>
@@ -43,6 +46,18 @@
                         @else
                             <span class="badge bg-danger">Không hoạt động</span>
                         @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.users.edit', $item->userid) }}"
+                            class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+                        <a href="{{ route('admin.users.destroy', $item->userid) }}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Bạn có chắc muốn xóa?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach

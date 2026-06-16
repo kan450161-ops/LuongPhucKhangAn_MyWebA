@@ -11,6 +11,9 @@
 @section('content')
 
 <h2 class="mb-3">DANH SÁCH SẢN PHẨM</h2>
+<a href="{{ route('admin.products.create') }}" class="btn btn-success mb-3">
+    + Thêm sản phẩm
+</a>
 
 <table class="table table-bordered table-hover">
     <thead>

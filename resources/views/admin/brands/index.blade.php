@@ -3,8 +3,12 @@
 @section('title', 'Thương hiệu')
 
 @section('content')
-    <h2 class="mb-3">Danh Sách Thương Hiệu</h2>
+    
+<h2 class="mb-3">Danh Sách Thương Hiệu</h2>
 
+    <a href="{{ route('admin.brands.create') }}" class="btn btn-success mb-3">
+        + Thêm thương hiệu
+    </a>
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">
             <tr>
@@ -32,6 +36,18 @@
                         @else
                             <span class="badge bg-danger">Không hoạt động</span>
                         @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.brands.edit', $item->id) }}"
+                            class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+                        <a href="{{ route('admin.brands.destroy', $item->id) }}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Bạn có chắc muốn xóa?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach

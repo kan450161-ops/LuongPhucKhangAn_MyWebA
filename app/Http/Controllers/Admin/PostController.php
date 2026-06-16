@@ -15,21 +15,31 @@ class PostController extends Controller
      */
     public function index($limit = 10)
     {
-        // Sử dụng Eloquent + eager loading để lấy bài viết cùng thông tin user liên quan
-        $list = Post::select(
-            'id',
-            'title',
-            'slug',
-            'content',
-            'image',
-            'status',
-            'user_id'
-        )
-        ->with(['user' => function($query) {
-            $query->select('userid', 'username');
-        }])
-        ->orderBy('title', 'asc')
-        ->paginate($limit);
+        // $list = DB::table('posts')
+        //     ->select('id','title','slug','content','image','status') //Chỉ lấy các cột cần thiết
+        //     ->where('status',1) //Chỉ lấy các loại sản phẩm đang hoạt động
+        //     ->orderBy('title') // Sắp xếp dữ liệu theo cột title theo thứ tự tăng dần
+        //     ->get(); //Lấy tất cả dữ liệu thỏa mãn
+        
+        // $list = DB::table('posts')
+        //     ->join('users', 'posts.user_id', '=', 'users.userid')
+        //     ->select(
+        //         'posts.id',
+        //         'posts.title',
+        //         'posts.slug',
+        //         'posts.content',
+        //         'posts.image',
+        //         'posts.status',
+        //         'users.username'
+        //     )
+        //     ->orderBy('posts.title', 'asc')
+        //     ->get();
+            $list = Post::with([
+            'user:userid,username'
+            ])
+            -> select('id','title','slug','content','image','status','user_id')
+            ->orderBy('title')
+            ->paginate($limit);
 
         return view('admin.posts.index', compact('list'));
     }
@@ -39,8 +49,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        $users = User::select('userid','fullname')->orderBy('fullname')->get();
-        return view('admin.posts.create', compact('users'));
+        return view('admin.posts.create');
     }
 
     /**
@@ -48,34 +57,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'title' => 'required|string|max:200',
-        //     'slug' => 'required|string|max:255|unique:posts,slug',
-        //     'content' => 'required|string',
-        //     'user_id' => 'nullable|integer|exists:users,userid'
+        //query builder
+        // DB::table('posts')->insert([
+        //     'title' => $request->input('title'),
+        //     'slug' => $request->input('slug')
         // ]);
-
-        // Xác định user_id: ưu tiên user đang đăng nhập, sau đó input, sau đó fallback lấy user đầu tiên
-        if (auth()->check()) {
-            $userId = auth()->user()->userid ?? auth()->id();
-        } else {
-            $userId = $request->input('user_id') ?? User::value('userid');
-        }
-
-        // Nếu vẫn null, mặc định 1 (nếu có)
-        if (empty($userId)) {
-            $userId = 1;
-        }
-
+        // Eloquent ORM
         Post::create([
             'title' => $request->title,
-            'slug' => $request->slug,
-            'content' => $request->content,
-            'user_id' => $userId,
-            'image' => $request->input('image'),
-            'status' => $request->input('status', 1),
+            'slug' => $request->slug
         ]);
-
         return redirect()->route('admin.posts.index');
     }
 

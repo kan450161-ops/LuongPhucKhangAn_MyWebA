@@ -11,7 +11,9 @@ tương ứng với @yield('title') trong layout -->
 tương ứng với @yield('content') trong layout --> 
 @section('content')
     <h2 class="mb-3">Danh Sách Loại Sản Phẩm</h2>
-
+    <a href="{{ route('admin.categories.create') }}" class="btn btn-success mb-3">
+        + Thêm loại sản phẩm
+    </a>
     <table class="table table-bordered table-hover table-striped">
             <thead class="table-dark">
                 <tr>
@@ -20,7 +22,7 @@ tương ứng với @yield('content') trong layout -->
                     <th>Tên loại</th>
                     <th>Slug</th>
                     <th>Trạng thái</th>
-                    <th>Hành động</th>
+                    <th width="150">Thao tác</th>
                 </tr>
             </thead>
 
@@ -39,16 +41,16 @@ tương ứng với @yield('content') trong layout -->
                         @endif
                     </td>
                     <td>
-                        <form action="{{ route('admin.categories.destroy', $item->cateid) }}"
-                            method="POST"
-                            onsubmit="return confirm('Bạn có chắc muốn xóa không?')">
-                            @csrf
-                            @method('DELETE')
+                        <a href="{{ route('admin.categories.edit', $item->cateid) }}"
+                            class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
 
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                Xóa
-                            </button>
-                        </form>
+                        <a href="{{ route('admin.categories.destroy', $item->cateid) }}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Bạn có chắc muốn xóa?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach
