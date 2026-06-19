@@ -21,7 +21,11 @@ class Product extends Model
         'slug',
         'description',
         'image',
-        'status'
+        'status',
+        'cateid',
+        'brandid',
+        'price',
+        'pricediscount'
     ];
 
     //cấu hình quan hệ với bảng categories

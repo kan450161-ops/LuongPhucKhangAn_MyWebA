@@ -1,6 +1,6 @@
 <nav class="navbar navbar-light bg-light admin-header">
     <div class="container-fluid">
-        <span class="navbar-brand">Admin Panel</span>
+        <span class="navbar-brand"></span>
         <ul class="nav">
             <li class="nav-item">
                 <a class="nav-link" href="#">Xin chào</a>

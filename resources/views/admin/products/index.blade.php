@@ -12,9 +12,14 @@
 
 <h2 class="mb-3">DANH SÁCH SẢN PHẨM</h2>
 <a href="{{ route('admin.products.create') }}" class="btn btn-success mb-3">
-    + Thêm sản phẩm
+    <i class="bi bi-plus-circle"></i>
+    Thêm sản phẩm
 </a>
-
+@if(session('success')) 
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
 <table class="table table-bordered table-hover">
     <thead>
         <tr>

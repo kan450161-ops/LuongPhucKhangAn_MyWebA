@@ -27,7 +27,7 @@ Route::get('/admin/categories', [CategoryController::class, 'index']) ->name('ad
 Route::get('/admin/categories/create', [CategoryController::class, 'create']) ->name('admin.categories.create');
 Route::post('/admin/categories/store', [CategoryController::class, 'store']) ->name('admin.categories.store');
 Route::get('/admin/categories/edit/{id}', [CategoryController::class, 'edit']) ->name('admin.categories.edit');
-Route::put('/admin/categories/{id}', [CategoryController::class, 'update']) ->name('admin.categories.update');
+Route::post('/admin/categories/{id}', [CategoryController::class, 'update']) ->name('admin.categories.update');
 Route::delete('/admin/categories/{id}', [CategoryController::class, 'destroy']) ->name('admin.categories.destroy');
 
 
@@ -36,7 +36,7 @@ Route::get('/admin/products', [ProductController::class, 'index']) ->name('admin
 Route::get('/admin/products/create', [ProductController::class, 'create']) ->name('admin.products.create');
 Route::post('/admin/products/store', [ProductController::class, 'store']) ->name('admin.products.store');
 Route::get('/admin/products/edit/{id}', [ProductController::class, 'edit']) ->name('admin.products.edit');
-Route::put('/admin/products/{id}', [ProductController::class, 'update']) ->name('admin.products.update');
+Route::post('/admin/products/{id}', [ProductController::class, 'update']) ->name('admin.products.update');
 Route::delete('/admin/products/{id}', [ProductController::class, 'destroy']) ->name('admin.products.destroy');
 // test
 Route::get('/test1', [ProductController::class, 'test1']);
@@ -48,7 +48,7 @@ Route::get('/admin/posts', [PostController::class, 'index'])->name('admin.posts.
 Route::get('/admin/posts/create', [PostController::class, 'create'])->name('admin.posts.create');
 Route::post('/admin/posts/store', [PostController::class, 'store'])->name('admin.posts.store');
 Route::get('/admin/posts/edit/{id}', [PostController::class, 'edit'])->name('admin.posts.edit');
-Route::put('/admin/posts/{id}', [PostController::class, 'update'])->name('admin.posts.update');
+Route::post('/admin/posts/{id}', [PostController::class, 'update'])->name('admin.posts.update');
 Route::delete('/admin/posts/{id}', [PostController::class, 'destroy'])->name('admin.posts.destroy');
 
 
@@ -57,7 +57,7 @@ Route::get('/admin/brand', [BrandController::class, 'index']) ->name('admin.bran
 Route::get('/admin/brand/create', [BrandController::class, 'create']) ->name('admin.brands.create');
 Route::post('/admin/brand/store', [BrandController::class, 'store'])->name('admin.brands.store');
 Route::get('/admin/brand/edit/{id}', [BrandController::class, 'edit']) ->name('admin.brands.edit');
-Route::put('/admin/brand/{id}', [BrandController::class, 'update'])->name('admin.brands.update');
+Route::post('/admin/brand/{id}', [BrandController::class, 'update'])->name('admin.brands.update');
 Route::delete('/admin/brand/{id}', [BrandController::class, 'destroy'])->name('admin.brands.destroy');
 
 
@@ -66,7 +66,7 @@ Route::get('/admin/user', [UserController::class, 'index']) ->name('admin.users.
 Route::get('/admin/user/create', [UserController::class, 'create']) ->name('admin.users.create');
 Route::post('/admin/user/store', [UserController::class, 'store'])->name('admin.users.store');
 Route::get('/admin/user/edit/{id}', [UserController::class, 'edit']) ->name('admin.users.edit');
-Route::put('/admin/user/{id}', [UserController::class, 'update'])->name('admin.users.update');
+Route::post('/admin/user/{id}', [UserController::class, 'update'])->name('admin.users.update');
 Route::delete('/admin/user/{id}', [UserController::class, 'destroy'])->name('admin.users.destroy');
 
 // ================= DASHBOARD =================

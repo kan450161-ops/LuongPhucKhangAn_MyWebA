@@ -43,14 +43,36 @@ class UserController extends Controller
         //     'password' => Hash::make($request->password),
         // ]);
         // Eloquent ORM
+        // User::create([
+        //     'fullname' => $request->fullname,
+        //     'username' => $request->username,
+        //     'email' => $request->email,
+        //     'password' => Hash::make($request->password),
+        // ]);
+
+        // return redirect()->route('admin.users.index');
+
+        try{
         User::create([
             'fullname' => $request->fullname,
             'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'gender' => $request->gender,
+            'role' => $request->role,
+            'birthday' => $request->birthday,
+            'status' => $request->status
         ]);
-
-        return redirect()->route('admin.users.index');
+        return redirect()
+        ->route('admin.users.index')
+        ->with('success', 'Thêm Người Dùng thành công!');
+        }catch(\Exception $e){
+            return back()
+            ->withInput()
+            ->with('error', 'Thêm Người dùng thất bại! Lỗi: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -66,7 +88,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        return"Edit User with id: $id";
+        $user = User::find($id);
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -74,7 +97,40 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        return"Update User with id: $id";
+        try {
+
+            $user = User::find($id);;
+
+            if (!$user) {
+                return redirect()
+                    ->route('admin.users.index')
+                    ->with('error', 'Sản phẩm không tồn tại');
+            }
+
+            // thực hiện cập nhật sản phẩm
+            $user->update([
+                'fullname' => $request->fullname,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'gender' => $request->gender,
+                'role' => $request->role,
+                'birthday' => $request->birthday,
+                'status' => $request->status
+            ]);
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'Cập nhật Danh mục thành công');
+
+        } catch (\Exception $e) {
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**

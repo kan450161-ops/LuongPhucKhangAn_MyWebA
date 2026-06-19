@@ -28,17 +28,12 @@
                 <ul class="nav flex-column ms-3">
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('admin.categories.index') }}">
-                            Danh sách loại sản phẩm
+                            Danh sách loại danh mục
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('admin.categories.create') }}" class="btn btn-success mb-3">
-                            + Thêm loại sản phẩm
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('admin.categories.edit', ['id' => 1]) }}">
-                            + Sửa loại sản phẩm
+                            + Thêm loại danh mục
                         </a>
                     </li>
                 </ul>

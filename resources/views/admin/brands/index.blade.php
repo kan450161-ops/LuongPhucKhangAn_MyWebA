@@ -7,7 +7,8 @@
 <h2 class="mb-3">Danh Sách Thương Hiệu</h2>
 
     <a href="{{ route('admin.brands.create') }}" class="btn btn-success mb-3">
-        + Thêm thương hiệu
+        <i class="bi bi-plus-circle"></i>
+        Thêm thương hiệu
     </a>
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">

@@ -37,7 +37,7 @@ class PostController extends Controller
             $list = Post::with([
             'user:userid,username'
             ])
-            -> select('id','title','slug','content','image','status','user_id')
+            ->select('id','title','slug','content','image','status','user_id')
             ->orderBy('title')
             ->paginate($limit);
 
@@ -49,7 +49,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $users = User::select('userid','fullname')->get();
+        return view('admin.posts.create', compact('users'));
     }
 
     /**
@@ -63,11 +64,27 @@ class PostController extends Controller
         //     'slug' => $request->input('slug')
         // ]);
         // Eloquent ORM
+        // Post::create([
+        //     'title' => $request->title,
+        //     'slug' => $request->slug
+        // ]);
+        // return redirect()->route('admin.posts.index');
+        try{
         Post::create([
             'title' => $request->title,
-            'slug' => $request->slug
+            'slug' => $request->slug,
+            'content' => $request->content,
+            'user_id' => $request->user_id,
+            'status' => $request->status
         ]);
-        return redirect()->route('admin.posts.index');
+        return redirect()
+        ->route('admin.posts.index')
+        ->with('success', 'Thêm sản phẩm thành công!');
+        }catch(\Exception $e){
+            return back()
+            ->withInput()
+            ->with('error', 'Thêm sản phẩm thất bại! Lỗi: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -83,7 +100,9 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        return"Edit Post with id: $id";
+        $posts = Post::find($id);
+        $users = User::select('userid','fullname') -> get();
+        return view('admin.posts.edit', compact('posts','users'));
     }
 
     /**
@@ -91,7 +110,35 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        return"Update Post with id: $id";
+        try {
+            
+             $posts = Post::find($id);
+
+            if (!$posts) {
+                return redirect()
+                    ->route('admin.posts.index')
+                    ->with('error', 'Bài viết không tồn tại');
+            }
+
+            // thực hiện cập nhật sản phẩm
+            $posts->update([
+                'title' => $request->title,
+                'slug' => $request->slug,
+                'content' => $request->content,
+                'user_id' => $request->user_id,
+                'status' => $request->status
+            ]);
+
+            return redirect()
+                ->route('admin.posts.index')
+                ->with('success', 'Cập nhật Bài viết thành công');
+
+        } catch (\Exception $e) {
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**

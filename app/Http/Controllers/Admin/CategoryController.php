@@ -49,12 +49,27 @@ class CategoryController extends Controller
         //     'slug' => $request->slug
         // ]);
         // Eloquent ORM
+        // Category::create([
+        //     'catename' => $request->catename,
+        //     'slug' => $request->slug,
+        //     ''
+        // ]);
+        try{
         Category::create([
             'catename' => $request->catename,
-            'slug' => $request->slug
+            'slug' => $request->slug,
+            'sort_order' => $request->sort_order ?? 0,
+            'status' => $request->status,
+            'description' => $request->description
         ]);
-
-        return redirect()->route('admin.categories.index');
+        return redirect()
+        ->route('admin.categories.index')
+        ->with('success', 'Thêm Danh mục thành công!');
+        }catch(\Exception $e){
+            return back()
+            ->withInput()
+            ->with('error', 'Thêm Danh mục thất bại! Lỗi: ' . $e->getMessage());
+        }
     }
 
     /**
@@ -70,7 +85,8 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
-        return"Edit Category with id: $id";
+        $categories = Category::find($id);
+        return view('admin.categories.edit', compact('categories'));
     }
 
     /**
@@ -78,14 +94,35 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        DB::table('categories') //Truy cập vào bảng categories
-            ->where('cateid', $id)
-            ->update([
+        try {
+
+            $categories = Category::find($id);
+
+            if (!$categories) {
+                return redirect()
+                    ->route('admin.categories.index')
+                    ->with('error', 'Sản phẩm không tồn tại');
+            }
+
+            // thực hiện cập nhật sản phẩm
+            $categories->update([
                 'catename' => $request->catename,
-                'slug' => $request->slug
+                'slug' => $request->slug,
+                'sort_order' => $request->sort_order,
+                'status' => $request->status,
+                'description' => $request->description
             ]);
 
-        return redirect()->route('admin.categories.index');
+            return redirect()
+                ->route('admin.categories.index')
+                ->with('success', 'Cập nhật Danh mục thành công');
+
+        } catch (\Exception $e) {
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     /**

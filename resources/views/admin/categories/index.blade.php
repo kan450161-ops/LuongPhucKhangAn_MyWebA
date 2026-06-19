@@ -10,9 +10,10 @@ tương ứng với @yield('title') trong layout -->
 <!-- gán nội dung cho vung section 'content'
 tương ứng với @yield('content') trong layout --> 
 @section('content')
-    <h2 class="mb-3">Danh Sách Loại Sản Phẩm</h2>
+    <h2 class="mb-3">Danh Sách Loại Danh Mục</h2>
     <a href="{{ route('admin.categories.create') }}" class="btn btn-success mb-3">
-        + Thêm loại sản phẩm
+        <i class="bi bi-plus-circle"></i>
+        Thêm loại danh mục
     </a>
     <table class="table table-bordered table-hover table-striped">
             <thead class="table-dark">

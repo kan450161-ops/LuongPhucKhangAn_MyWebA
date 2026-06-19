@@ -4,32 +4,32 @@
 
 @section('content')
 <div class="border rounded bg-white p-4 shadow-sm">
-    <h3 class="mb-4">Thêm Bài Viết</h3>
+    <h3 class="mb-4">Sửa Bài Viết</h3>
     @if(session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
     </div>
     @endif
 
-    <form action="{{ route('admin.posts.store') }}" method="POST">
+    <form action="{{ route('admin.posts.update', $posts->id) }}" method="POST">
         @csrf
 
         <div class="mb-3">
             <label class="form-label">Tên Bài Viết</label>
             <input type="text" name="title" class="form-control"
-            value="{{ old('title') }}">
+            value="{{ old('title', $posts->title ) }}">
         </div>
 
         <div class="mb-3">
             <label class="form-label">Slug</label>
             <input type="text" name="slug" class="form-control"
-            value="{{ old('slug') }}">
+            value="{{ old('slug', $posts->slug) }}">
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Nội dung</label>
+            <label class="form-label">Nội Dung</label>
             <input type="text" name="content" class="form-control"
-            value="{{ old('content') }}">
+            value="{{ old('content', $posts->content) }}">
         </div>
 
         <div class="mb-3">
@@ -37,7 +37,7 @@
             <select name="user_id" class="form-select">
                 @foreach($users as $user)
                 <option value="{{ $user->userid }}"
-                    {{ old('user_id') == $user->userid ? 'selected' : '' }} >
+                    {{ old('user_id',$posts->user_id) == $user->userid ? 'selected' : '' }} >
                     {{ $user->fullname }}
                 </option>
                 @endforeach
@@ -47,12 +47,12 @@
         <div class="mb-3">
             <label class="form-label d-block">Trạng thái</label>
             <input type="radio" class="btn-check" name="status" id="active" value="1" 
-                {{ old('status') == 1 ? 'checked' : '' }}>
+                {{ old('status',$posts->status) == 1 ? 'checked' : '' }}>
             <label class="btn btn-outline-success" for="active">
                 Hiển thị
             </label>
             <input type="radio" class="btn-check" name="status" id="inactive" value="0"
-                {{ old('status') == 0 ? 'checked' : '' }}>
+                {{ old('status',$posts->status) == 0 ? 'checked' : '' }}>
             <label class="btn btn-outline-danger" for="inactive">
                 Ẩn
             </label>
@@ -61,8 +61,8 @@
 
 
         <button type="submit" class="btn btn-primary mb-3">
-                Lưu
-            </button>
+            Cập nhật
+        </button>
         <a href="{{ route('admin.posts.index') }}" class="btn btn-secondary mb-3">
             Quay lại
         </a>

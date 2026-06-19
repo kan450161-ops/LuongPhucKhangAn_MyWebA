@@ -15,9 +15,10 @@
                 <th>Ảnh đại diện</th>
                 <th>Tên bài viết</th>
                 <th>Người đăng</th>
-                <th>Nội dung</th>
+                <th >Nội dung</th>
                 <th>Slug</th>
                 <th>Trạng thái</th>
+                <th width="100">Hành động</th>
             </tr>
         </thead>
         <tbody>
@@ -38,6 +39,17 @@
                         @else
                             <span class="badge bg-danger">Không hoạt động</span>
                         @endif
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.posts.edit', $item->id) }}"
+                            class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a href="{{ route('admin.posts.destroy', $item->id) }}"
+                            class="btn btn-danger btn-sm"
+                            onclick="return confirm('Bạn có chắc muốn xóa?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </td>
                 </tr>
             @endforeach

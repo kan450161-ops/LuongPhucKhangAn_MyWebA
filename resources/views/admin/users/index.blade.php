@@ -5,7 +5,8 @@
 @section('content')
     <h2 class="mb-3">Danh Sách Người Dùng</h2>
     <a href="{{ route('admin.users.create') }}" class="btn btn-success mb-3">
-        + Thêm người dùng
+        <i class="bi bi-plus-circle"></i>
+        Thêm người dùng
     </a>
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">

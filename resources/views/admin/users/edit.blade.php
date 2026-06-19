@@ -5,9 +5,14 @@
 @section('content')
 
 <div class="border rounded bg-white p-4 shadow-sm">
-    <h3 class="mb-4">Thêm người dùng</h3>
+    <h3 class="mb-4">Sửa người dùng</h3>
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+    @endif
 
-    <form action="{{ route('admin.users.store') }}" method="POST">
+    <form action="{{ route('admin.users.update', $user -> userid) }}" method="POST">
         @csrf
 
         <div class="row">
@@ -17,21 +22,21 @@
                     <label>Họ và tên</label>
                     <input type="text" name="fullname"
                         class="form-control"
-                        value="{{ old('fullname') }}">
+                        value="{{ old('fullname', $user -> fullname) }}">
                 </div>
 
                 <div class="mb-3">
                     <label>Tên đăng nhập</label>
                     <input type="text" name="username"
                         class="form-control"
-                        value="{{ old('username') }}">
+                        value="{{ old('username',$user -> username) }}">
                 </div>
 
                 <div class="mb-3">
                     <label>Email</label>
                     <input type="email" name="email"
                         class="form-control"
-                        value="{{ old('email') }}">
+                        value="{{ old('email', $user -> email) }}">
                 </div>
 
                 <div class="mb-3">
@@ -46,7 +51,7 @@
                     <input type="text"
                         name="phone"
                         class="form-control"
-                        value="{{ old('phone') }}">
+                        value="{{ old('phone',$user -> phone) }}">
                 </div>
 
                 <div class="mb-3">
@@ -54,7 +59,7 @@
                     <input type="text"
                         name="address"
                         class="form-control"
-                        value="{{ old('address') }}">
+                        value="{{ old('address',$user -> address) }}">
                 </div>
 
             </div>
@@ -64,8 +69,8 @@
                 <div class="mb-3">
                     <label>Giới tính</label>
                     <select name="gender" class="form-select">
-                        <option value="1"{{ old('gender') == '1' ? 'selected' : '' }}>Nam</option>
-                        <option value="0" {{ old('gender') == '0' ? 'selected' : '' }}>Nữ</option>
+                        <option value="1"{{ old('gender', $user->gender) == '1' ? 'selected' : '' }}>Nam</option>
+                        <option value="0" {{ old('gender', $user->gender) == '0' ? 'selected' : '' }}>Nữ</option>
                     </select>
                 </div>
 
@@ -74,26 +79,26 @@
                     <input type="date"
                         name="birthday"
                         class="form-control"
-                        value="{{ old('birthday') }}">
+                        value="{{ old('birthday',$user -> birthday ) }}">
                 </div>
 
                 <div class="mb-3">
                     <label>Vai trò</label>
                     <select name="role" class="form-select">
-                        <option value="2"{{ old('role') == '2' ? 'selected' : '' }}>Admin</option>
-                        <option value="1"{{ old('role') == '1' ? 'selected' : '' }}>User</option>
+                        <option value="2"{{ old('role', $user->role) == '2' ? 'selected' : '' }}>Admin</option>
+                        <option value="1"{{ old('role', $user->role) == '1' ? 'selected' : '' }}>User</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label d-block">Trạng thái</label>
                         <input type="radio" class="btn-check" name="status" id="active" value="1" 
-                        {{ old('status') == 1 ? 'checked' : '' }}>
+                        {{ old('status', $user -> status) == 1 ? 'checked' : '' }}>
                     <label class="btn btn-outline-success" for="active">
                         Hoạt Động
                     </label>
                     <input type="radio" class="btn-check" name="status" id="inactive" value="0"
-                        {{ old('status') == 0 ? 'checked' : '' }}>
+                        {{ old('status', $user -> status) == 0 ? 'checked' : '' }}>
                     <label class="btn btn-outline-danger" for="inactive">
                         Khóa
                     </label>
@@ -103,7 +108,7 @@
         </div>
 
         <button type="submit" class="btn btn-primary">
-            Lưu
+            Cập nhật
         </button>
 
         <a href="{{ route('admin.users.index') }}"

@@ -1,17 +1,100 @@
-<form action="{{ route('admin.products.store') }}" method="POST">
-    @csrf
+<!-- {{-- thừa kế layout/view admin.blade.php --}}
+{{-- resources/views/admin/layouts/admin.blade.php --}} -->
+@extends('admin.layouts.admin')
 
-    <div class="mb-3">
-        <label>Tên sản phẩm</label>
-        <input type="text" name="productname" class="form-control">
+<!-- {{-- Gán nội dung cho vùng section 'title' --}}
+ (tương ứng với @yield('title') trong layout -->
+@section('title', 'Loại Sản phẩm')
+
+<!-- {{-- Gán nội dung cho vùng section 'content' --}}
+ (tương ứng với @yield('content') trong layout -->
+@section('content')
+
+<div class="border rounded bg-white p-4 shadow-sm">
+    <h3 class="mb-4">Thêm Danh Mục</h3>
+    @if(session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
     </div>
+    @endif
 
-    <div class="mb-3">
-        <label>Slug</label>
-        <input type="text" name="slug" class="form-control">
-    </div>
+    <form action="{{ route('admin.products.store') }}" method="POST">
+        @csrf
 
-    <button type="submit" class="btn btn-primary">
-        Lưu
-    </button>
-</form>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Tên sản phẩm</label>
+                        <input type="text" name="productname" class="form-control" 
+                        value="{{ old('productname') }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Slug</label>
+                        <input type="text" name="slug" class="form-control" 
+                        value="{{ old('slug') }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Loại sản phẩm</label>
+                        <select name="cateid" class="form-select">
+                            <option value="">-- Chọn loại sản phẩm --</option>
+                            @foreach($categories as $category)
+                            <option value="{{ $category->cateid }}"
+                                {{ old('cateid') == $category->cateid ? 'selected' : '' }} >
+                                {{ $category->catename }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Thương hiệu</label>
+                        <select name="brandid" class="form-select">
+                            <option value="">-- Chọn thương hiệu --</option>
+                            @foreach($brands as $brand)
+                            <option value="{{ $brand->id }}" 
+                                {{ old('brandid') == $brand->id ? 'selected' : '' }} >
+                                {{ $brand->brandname }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label class="form-label">Giá</label>
+                        <input type="number" name="price" class="form-control" required
+                        value="{{ old('price') }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Giá khuyến mãi</label>
+                        <input type="number" name="pricediscount" class="form-control" value="{{ old('pricediscount') ?? 0 }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label d-block">Trạng thái</label>
+                        <input type="radio" class="btn-check" name="status" id="active" value="1" 
+                        {{ old('status') == 1 ? 'checked' : '' }}>
+                        <label class="btn btn-outline-success" for="active">
+                            Hiển thị
+                        </label>
+                        <input type="radio" class="btn-check" name="status" id="inactive" value="0"
+                        {{ old('status') == 0 ? 'checked' : '' }}>
+                        <label class="btn btn-outline-danger" for="inactive">
+                            Ẩn
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mô tả sản phẩm</label>
+                        <textarea name="description" rows="4" class="form-control">{{ old('description') }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-3">
+                Lưu
+            </button>
+            <a href="{{ route('admin.products.index') }}" class="btn btn-secondary mb-3">
+            Quay lại
+            </a>
+
+        </form>
+</div>
+@endsection

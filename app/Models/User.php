@@ -13,6 +13,8 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
+
+    protected $primaryKey = 'userid';
     /**
      * The attributes that are mass assignable.
      *
@@ -23,6 +25,12 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
+        'phone',
+        'address',
+        'gender',
+        'role',
+        'birthday',
+        'status'
     ];
 
     /**
