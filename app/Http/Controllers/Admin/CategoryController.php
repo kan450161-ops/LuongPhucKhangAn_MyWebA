@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -54,6 +54,37 @@ class CategoryController extends Controller
         //     'slug' => $request->slug,
         //     ''
         // ]);
+        // Thực hiện Validation dữ liệu
+        // Tự động lưu lỗi vào $errors và chuyển về trang trước nếu Validation thất bại
+        $request->validate(
+        // Parram 1: Rules - khai báo các quy tắc kiểm tra dữ liệu
+        [
+        'catename' => 'required|min:3|max:100|unique:categories,catename',
+        'slug' => [
+        'required',
+        'min:5',
+        'max:150',
+        'unique:categories,slug',
+        'regex:/^[a-z0-9-]+$/'
+        ],
+        'status' => 'required|in:0,1'
+        ],
+        // Parram 2: Messages - tùy chỉnh nội dung thông báo lỗi.
+        [
+        'required' => ':attribute không được để trống.',
+        'min' => ':attribute phải từ :min ký tự trở lên.',
+        'max' => ':attribute không vượt quá :max ký tự.',
+        'unique' => ':attribute đã tồn tại.',
+        'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
+        'status.in' => ':attribute không hợp lệ.'
+        ],
+        // Parram 3: Attributes- tên hiển thị của các trường
+        [
+        'catename' => 'Tên loại',
+        'slug' => 'Đường dẫn (Slug)',
+        'status' => 'Trạng thái'
+        ]
+        );
         try{
         Category::create([
             'catename' => $request->catename,
@@ -94,6 +125,36 @@ class CategoryController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Validate dữ liệu
+        $request->validate(
+        // Param 1: Rules - khai báo các quy tắc kiểm tra dữ liệu
+        [
+            'catename' => 'required|min:3|max:100|unique:categories,catename,' . $id.',cateid',
+            'slug' => [
+            'required',
+            'min:5',
+            'max:150',
+            'regex:/^[a-z0-9-]+$/',
+            Rule::unique('categories', 'slug')->ignore($id, 'cateid'),
+            ],
+            'status' => 'required|in:0,1'
+        ],
+        // Param 2: Messages - tùy chỉnh nội dung thông báo lỗi
+        [
+            'required' => ':attribute không được để trống.',
+            'min' => ':attribute phải từ :min ký tự trở lên.',
+            'max' => ':attribute không vượt quá :max ký tự.',
+            'unique' => ':attribute đã tồn tại.',
+            'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
+            'status.in' => ':attribute không hợp lệ.'
+        ],
+        // Param 3: Attributes - tên hiển thị của các trường
+        [
+            'catename' => 'Tên loại',
+            'slug' => 'Đường dẫn (Slug)',
+            'status' => 'Trạng thái'
+        ]
+        );
         try {
 
             $categories = Category::find($id);

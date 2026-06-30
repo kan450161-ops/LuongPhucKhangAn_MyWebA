@@ -5,11 +5,25 @@
 @section('content')
 <div class="border rounded bg-white p-4 shadow-sm">
     <h3 class="mb-4">Thêm Bài Viết</h3>
+        <!-- @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>    
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+
     @if(session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
     </div>
-    @endif
+    @endif -->
+
+      <!-- gọi component -->
+    <x-admin.alert />
 
     <form action="{{ route('admin.posts.store') }}" method="POST">
         @csrf
@@ -18,18 +32,36 @@
             <label class="form-label">Tên Bài Viết</label>
             <input type="text" name="title" class="form-control"
             value="{{ old('title') }}">
+             <!-- hiện thị lỗi  -->
+                        @error('title')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
         </div>
 
         <div class="mb-3">
             <label class="form-label">Slug</label>
             <input type="text" name="slug" class="form-control"
             value="{{ old('slug') }}">
+             <!-- hiện thị lỗi  -->
+                        @error('slug')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
         </div>
 
         <div class="mb-3">
             <label class="form-label">Nội dung</label>
             <input type="text" name="content" class="form-control"
             value="{{ old('content') }}">
+             <!-- hiện thị lỗi  -->
+                        @error('content')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
         </div>
 
         <div class="mb-3">
@@ -42,6 +74,12 @@
                 </option>
                 @endforeach
             </select>
+             <!-- hiện thị lỗi  -->
+                        @error('user_id')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
         </div>
 
         <div class="mb-3">
@@ -56,6 +94,12 @@
             <label class="btn btn-outline-danger" for="inactive">
                 Ẩn
             </label>
+             <!-- hiện thị lỗi  -->
+                        @error('status')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
         </div>
 
 

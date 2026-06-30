@@ -15,6 +15,11 @@ tương ứng với @yield('content') trong layout -->
         <i class="bi bi-plus-circle"></i>
         Thêm loại danh mục
     </a>
+    @if(session('success')) 
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
     <table class="table table-bordered table-hover table-striped">
             <thead class="table-dark">
                 <tr>

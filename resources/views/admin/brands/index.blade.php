@@ -10,6 +10,11 @@
         <i class="bi bi-plus-circle"></i>
         Thêm thương hiệu
     </a>
+    @if(session('success')) 
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">
             <tr>

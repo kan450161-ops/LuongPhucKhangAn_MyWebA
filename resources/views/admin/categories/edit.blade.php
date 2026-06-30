@@ -13,11 +13,24 @@ tương ứng với @yield('content') trong layout -->
 
 <div class="border rounded bg-white p-4 shadow-sm">
     <h3 class="mb-4">Chỉnh sửa Danh mục</h3>
+       <!-- @if($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>    
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
     @if(session('error'))
     <div class="alert alert-danger">
         {{ session('error') }}
     </div>
-    @endif
+    @endif -->
+
+      <!-- gọi component -->
+    <x-admin.alert />
 
     <form action="{{ route('admin.categories.update', $categories->cateid) }}" method="POST">
         @csrf
@@ -31,6 +44,12 @@ tương ứng với @yield('content') trong layout -->
                         name="catename" 
                         class="form-control"
                         value="{{ old ('catname', $categories->catename) }}" require>
+                         <!-- hiện thị lỗi  -->
+                        @error('catename')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
                 </div>
 
                 <div class="mb-3">
@@ -39,6 +58,12 @@ tương ứng với @yield('content') trong layout -->
                             name="slug" 
                             class="form-control"
                             value="{{ old('slug', $categories->slug) }}" required>
+                            <!-- hiện thị lỗi  -->
+                        @error('slug')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
                 </div>
 
                 <div class="mb-3">
@@ -53,6 +78,12 @@ tương ứng với @yield('content') trong layout -->
                     <label class="btn btn-outline-danger" for="inactive">
                         Ẩn
                     </label>
+                     <!-- hiện thị lỗi  -->
+                        @error('status')
+                            <span class = " text-danger ">
+                                {{$message}}
+                            </span>
+                        @enderror
                 </div>
 
                 <div class="mb-3">

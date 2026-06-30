@@ -13,11 +13,9 @@ tương ứng với @yield('content') trong layout -->
 
 <div class="border rounded bg-white p-4 shadow-sm">
     <h3 class="mb-4">Sửa Thương Hiệu</h3>
-    @if(session('error'))
-    <div class="alert alert-danger">
-        {{ session('error') }}
-    </div>
-    @endif
+    
+    <!-- gọi component -->
+    <x-admin.alert />
 
     <form action="{{ route('admin.brands.update', $brands-> id) }}" method="POST">
         @csrf

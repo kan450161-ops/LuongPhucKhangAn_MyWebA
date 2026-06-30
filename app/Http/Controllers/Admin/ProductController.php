@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\ProductRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
+use Illuminate\Validation\Rule;
 
 class ProductController extends Controller
 {
@@ -77,8 +79,46 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
+        // // Thực hiện Validation dữ liệu
+        // // Tự động lưu lỗi vào $errors và chuyển về trang trước nếu Validation thất bại
+        // $request->validate(
+        //     // Parram 1: Rules - khai báo các quy tắc kiểm tra dữ liệu
+        // [
+        //     'productname' => 'required|min:3|max:100|unique:products,productname',
+        //     'slug' => [
+        //         'required',
+        //         'min:5',
+        //         'max:150',
+        //         'unique:products,slug',
+        //         'regex:/^[a-z0-9-]+$/'
+        //     ],
+        //     'cateid' => 'required',
+        //     'brandid' => 'required',
+        //     'price' => 'required|numeric|min:0',
+        //     'status' => 'required|in:0,1'
+        // ],
+        // // Parram 2: Messages - tùy chỉnh nội dung thông báo lỗi.
+        // [
+        //     'required' => ':attribute không được để trống.',
+        //     'min' => ':attribute phải từ :min ký tự trở lên.',
+        //     'max' => ':attribute không vượt quá :max ký tự.',
+        //     'unique' => ':attribute đã tồn tại.',
+        //     'numeric' => ':attribute phải là số.',
+        //     'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
+        //     'status.in' => ':attribute không hợp lệ.'
+        // ],
+        // // Parram 3: Attributes- tên hiển thị của các trường
+        // [
+        //     'productname' => 'Tên sản phẩm',
+        //     'slug' => 'Đường dẫn (Slug)',
+        //     'cateid' => 'Loại sản phẩm',
+        //     'brandid' => 'Thương hiệu',
+        //     'price' => 'Giá',
+        //     'status' => 'Trạng thái'
+        // ]
+        // );
         try{
         Product::create([
             'productname' => $request->productname,
@@ -122,8 +162,44 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProductRequest $request, string $id)
     {
+        // $request->validate(
+        //     // Parram 1: Rules - khai báo các quy tắc kiểm tra dữ liệu
+        // [
+        //     'productname' => 'required|min:3|max:100|unique:products,productname,'.$id.',id',
+        //     'slug' => [
+        //         'required',
+        //         'min:5',
+        //         'max:150',
+        //         'regex:/^[a-z0-9-]+$/',
+        //         Rule::unique('products', 'slug')->ignore($id, 'id'),
+        //     ],
+        //     'cateid' => 'required',
+        //     'brandid' => 'required',
+        //     'price' => 'required|numeric|min:0',
+        //     'status' => 'required|in:0,1'
+        // ],
+        // // Parram 2: Messages - tùy chỉnh nội dung thông báo lỗi.
+        // [
+        //     'required' => ':attribute không được để trống.',
+        //     'min' => ':attribute phải từ :min ký tự trở lên.',
+        //     'max' => ':attribute không vượt quá :max ký tự.',
+        //     'unique' => ':attribute đã tồn tại.',
+        //     'numeric' => ':attribute phải là số.',
+        //     'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
+        //     'status.in' => ':attribute không hợp lệ.'
+        // ],
+        // // Parram 3: Attributes- tên hiển thị của các trường
+        // [
+        //     'productname' => 'Tên sản phẩm',
+        //     'slug' => 'Đường dẫn (Slug)',
+        //     'cateid' => 'Loại sản phẩm',
+        //     'brandid' => 'Thương hiệu',
+        //     'price' => 'Giá',
+        //     'status' => 'Trạng thái'
+        // ]
+        // );
             try {
 
             // Kiểm tra loại sản phẩm

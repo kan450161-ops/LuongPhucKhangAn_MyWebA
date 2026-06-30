@@ -7,7 +7,11 @@
     <a href="{{ route('admin.posts.create') }}" class="btn btn-success mb-3">
         + Thêm bài viết
     </a>
-
+@if(session('success')) 
+    <div class="alert alert-success">
+        {{ session('success') }}
+    </div>
+@endif
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">
             <tr>
