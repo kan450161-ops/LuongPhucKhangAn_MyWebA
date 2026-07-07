@@ -7,6 +7,10 @@ use App\Http\Requests\Admin\BrandRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Brand;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+
 
 class BrandController extends Controller
 {
@@ -51,16 +55,27 @@ class BrandController extends Controller
         // ]);
 
         try{
-        Brand::create([
-            'brandname' => $request->brandname,
-            'slug' => $request->slug,
-            'sort_order' => $request->sort_order ?? 0,
-            'status' => $request->status,
-            'description' => $request->description
-        ]);
-        return redirect()
-        ->route('admin.brands.index')
-        ->with('success', 'Thêm Thương Hiệu thành công!');
+            // upload hình ảnh (nếu có)
+            $fileName = null;
+            if ($request->hasFile('img')) {
+            $file = $request->file('img');
+            $fileName = Str::slug($request->brandname)
+            . '-' . time()
+            . '.' . $file->extension();
+            // hình ảnh được lưu vào thư mục storage/app/public/brands
+            $file->storeAs('brands', $fileName, 'public');
+            }
+            Brand::create([
+                'brandname' => $request->brandname,
+                'slug' => $request->slug,
+                'sort_order' => $request->sort_order ?? 0,
+                'status' => $request->status,
+                'description' => $request->description,
+                'image' => $fileName
+            ]);
+            return redirect()
+            ->route('admin.brands.index')
+            ->with('success', 'Thêm Thương Hiệu thành công!');
         }catch(\Exception $e){
             return back()
             ->withInput()
@@ -94,10 +109,27 @@ class BrandController extends Controller
 
             $brands = Brand::find($id);
 
-            if (!$brands) {
-                return redirect()
-                    ->route('admin.brands.index')
-                    ->with('error', 'Sản phẩm không tồn tại');
+            // if (!$brands) {
+            //     return redirect()
+            //         ->route('admin.brands.index')
+            //         ->with('error', 'Sản phẩm không tồn tại');
+            // }
+
+            // Có chọn hình ảnh mới
+            // Giữ tên hình ảnh cũ
+            $fileName = $brands->image;
+            if ($request->hasFile('img')) {
+            // Xóa hình ảnh cũ
+            if ($fileName) {
+            Storage::disk('public')->delete('brands/' . $brands->image);
+            }
+            // Upload hình ảnh mới
+            $file = $request->file('img');
+            $fileName = Str::slug($request->brandname)
+
+            . '-' . time()
+            . '.' . $file->extension();
+            $file->storeAs('brands', $fileName, 'public');
             }
 
             // thực hiện cập nhật sản phẩm
@@ -106,7 +138,8 @@ class BrandController extends Controller
                 'slug' => $request->slug,
                 'sort_order' => $request->sort_order,
                 'status' => $request->status,
-                'description' => $request->description
+                'description' => $request->description,
+                'image' => $fileName
             ]);
 
             return redirect()

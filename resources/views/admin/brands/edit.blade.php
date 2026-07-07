@@ -17,7 +17,7 @@ tương ứng với @yield('content') trong layout -->
     <!-- gọi component -->
     <x-admin.alert />
 
-    <form action="{{ route('admin.brands.update', $brands-> id) }}" method="POST">
+    <form action="{{ route('admin.brands.update', $brands-> id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class = "row">
             <div class="col-md-10">
@@ -31,6 +31,21 @@ tương ứng với @yield('content') trong layout -->
                     <label>Slug</label>
                     <input type="text" name="slug" class="form-control"
                     value="{{ old('slug',$brands -> slug) }}" required>
+                </div>
+
+                <div class = "mb-3 img-group">
+                    <label class = "form-label">Hình Ảnh</label>
+                    <input type="file" name="img" class = "form-control img-input">
+                    <div class="img-preview mt-2">
+                        @if($brands -> image)
+                            <img src = "{{ asset('storage/brands/'. $brands -> image)}}"
+                            alt="{{ $brands -> brandname }}" width="150" class="img-thumbnail">
+                        @endif
+                    </div>
+                    <!-- hiển thị lỗi cho trường img -->
+                     @error('img')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">
@@ -62,7 +77,7 @@ tương ứng với @yield('content') trong layout -->
         </div>
 
         <button type="submit" class="btn btn-primary mb-3">
-            Lưu
+            Cập nhật
         </button>
 
         <a href="{{ route('admin.brands.index') }}" class="btn btn-secondary mb-3">

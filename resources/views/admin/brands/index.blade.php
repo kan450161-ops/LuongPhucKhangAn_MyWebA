@@ -31,8 +31,10 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td class="text-center"> 
-                        <img src="{{ $item->image ? asset('images/' . $item->image) : asset('images/default.png') }}"
-                        alt="Logo" class="img-thumbnail" style="width: 72px; height: 72px; object-fit: cover;">
+                        @if ($item->image)
+                            <img src="{{ asset('storage/brands/'. $item->image) }}" 
+                            width="80" class="img-thumnail">
+                        @endif
                     </td><!--//Nếu có ảnh thì hiển thị ảnh, nếu không có thì hiển thị ảnh mặc định -->
                     <td>{{ $item->brandname }}</td>
                     <td>{{ $item->slug }}</td>

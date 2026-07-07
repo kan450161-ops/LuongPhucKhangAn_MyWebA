@@ -24,6 +24,7 @@ tương ứng với @yield('content') trong layout -->
             <thead class="table-dark">
                 <tr>
                     <th>STT</th>
+                    <th>Ảnh đại diện</th>
                     <th>Mã loại</th>
                     <th>Tên loại</th>
                     <th>Slug</th>
@@ -36,6 +37,12 @@ tương ứng với @yield('content') trong layout -->
             @foreach($list as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
+                    <td class="text-center"> 
+                        @if ($item->image)
+                            <img src="{{ asset('storage/categories/'. $item->image) }}" 
+                            width="80" class="img-thumnail">
+                        @endif
+                    </td><!--//Nếu có ảnh thì hiển thị ảnh, nếu không có thì hiển thị ảnh mặc định -->
                     <td>{{ $item->cateid }}</td>
                     <td>{{ $item->catename }}</td>
                     <td>{{ $item->slug }}</td>

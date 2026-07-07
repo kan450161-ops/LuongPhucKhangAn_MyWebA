@@ -32,7 +32,7 @@ tương ứng với @yield('content') trong layout -->
       <!-- gọi component -->
     <x-admin.alert />
 
-    <form action="{{ route('admin.categories.update', $categories->cateid) }}" method="POST">
+    <form action="{{ route('admin.categories.update', $categories->cateid) }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class = "row">
@@ -64,6 +64,21 @@ tương ứng với @yield('content') trong layout -->
                                 {{$message}}
                             </span>
                         @enderror
+                </div>
+
+                <div class = "mb-3 img-group">
+                    <label class = "form-label">Hình Ảnh</label>
+                    <input type="file" name="img" class = "form-control img-input">
+                    <div class="img-preview mt-2">
+                        @if($categories -> image)
+                            <img src = "{{ asset('storage/categories/'. $categories -> image)}}"
+                            alt="{{ $categories -> catename }}" width="150" class="img-thumbnail">
+                        @endif
+                    </div>
+                    <!-- hiển thị lỗi cho trường img -->
+                     @error('img')
+                        <div class="text-danger mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="mb-3">

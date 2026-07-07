@@ -37,6 +37,7 @@ Route::get('/admin/products/create', [ProductController::class, 'create']) ->nam
 Route::post('/admin/products/store', [ProductController::class, 'store']) ->name('admin.products.store');
 Route::get('/admin/products/edit/{id}', [ProductController::class, 'edit']) ->name('admin.products.edit');
 Route::post('/admin/products/{id}', [ProductController::class, 'update']) ->name('admin.products.update');
+Route::delete('/admin/products/{product}/images/{image}', [ProductController::class, 'deleteImage'])->name('admin.products.images.destroy');
 Route::delete('/admin/products/{id}', [ProductController::class, 'destroy']) ->name('admin.products.destroy');
 // test
 Route::get('/test1', [ProductController::class, 'test1']);

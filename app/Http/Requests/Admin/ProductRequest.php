@@ -42,7 +42,23 @@ class ProductRequest extends FormRequest
                 'regex:/^[a-z0-9-]+$/',
                 Rule::unique('products', 'slug')->ignore($id, 'id'),
             ],
-
+            'img' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:200',
+            ],
+            // mảng
+            'imgs' => [
+                'nullable',
+                'array',
+            ],
+            // từng phần tử trong file
+            'imgs.*' => [
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:200',
+            ],
             'cateid' => 'required',
             'brandid' => 'required',
             'price' => 'required|numeric|min:0',
@@ -59,7 +75,15 @@ class ProductRequest extends FormRequest
             'unique' => ':attribute đã tồn tại.',
             'numeric' => ':attribute phải là số.',
             'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
-            'status.in' => ':attribute không hợp lệ.'
+            'status.in' => ':attribute không hợp lệ.',
+            'img.image' => ':attribute phải là hình ảnh.',
+            'img.mimes' => ':attribute chỉ chấp nhận các định dạng: jpg, jpeg, png, webp.',
+            'img.max' => ':attribute không được vượt quá 200 KB.',
+
+            'image' => ':attribute phải là hình ảnh.',
+            'mimes' => ':attribute chỉ chấp nhận các định dạng: jpg, jpeg, png, webp.',
+            'image.max' => ':attribute không được vượt quá 200 KB.',
+            'images.*.max' => ':attribute không được vượt quá 200 KB.',
         ];
     }
     public function attributes(): array
@@ -70,7 +94,8 @@ class ProductRequest extends FormRequest
             'cateid' => 'Loại sản phẩm',
             'brandid' => 'Thương hiệu',
             'price' => 'Giá',
-            'status' => 'Trạng thái'
+            'status' => 'Trạng thái',
+            'img' => 'Hình ảnh'
         ];
     }
 }

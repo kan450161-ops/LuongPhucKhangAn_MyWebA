@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -59,48 +61,70 @@ class CategoryController extends Controller
         $request->validate(
         // Parram 1: Rules - khai báo các quy tắc kiểm tra dữ liệu
         [
-        'catename' => 'required|min:3|max:100|unique:categories,catename',
-        'slug' => [
-        'required',
-        'min:5',
-        'max:150',
-        'unique:categories,slug',
-        'regex:/^[a-z0-9-]+$/'
-        ],
-        'status' => 'required|in:0,1'
+            'catename' => 'required|min:3|max:100|unique:categories,catename',
+            'slug' => [
+                'required',
+                'min:5',
+                'max:150',
+                'unique:categories,slug',
+                'regex:/^[a-z0-9-]+$/'
+            ],
+            'img' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:200',
+            ],
+            'status' => 'required|in:0,1'
         ],
         // Parram 2: Messages - tùy chỉnh nội dung thông báo lỗi.
         [
-        'required' => ':attribute không được để trống.',
-        'min' => ':attribute phải từ :min ký tự trở lên.',
-        'max' => ':attribute không vượt quá :max ký tự.',
-        'unique' => ':attribute đã tồn tại.',
-        'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
-        'status.in' => ':attribute không hợp lệ.'
+            'required' => ':attribute không được để trống.',
+            'min' => ':attribute phải từ :min ký tự trở lên.',
+            'max' => ':attribute không vượt quá :max ký tự.',
+            'unique' => ':attribute đã tồn tại.',
+            'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
+            'status.in' => ':attribute không hợp lệ.',
+            'img.image' => ':attribute phải là hình ảnh.',
+            'img.mimes' => ':attribute chỉ chấp nhận các định dạng: jpg, jpeg, png, webp.',
+            'img.max' => ':attribute không được vượt quá 200 KB.'
         ],
         // Parram 3: Attributes- tên hiển thị của các trường
         [
-        'catename' => 'Tên loại',
-        'slug' => 'Đường dẫn (Slug)',
-        'status' => 'Trạng thái'
+            'catename' => 'Tên loại',
+            'slug' => 'Đường dẫn (Slug)',
+            'status' => 'Trạng thái',
+            'img'  => 'Hình ảnh'      
+
         ]
         );
         try{
-        Category::create([
-            'catename' => $request->catename,
-            'slug' => $request->slug,
-            'sort_order' => $request->sort_order ?? 0,
-            'status' => $request->status,
-            'description' => $request->description
-        ]);
-        return redirect()
-        ->route('admin.categories.index')
-        ->with('success', 'Thêm Danh mục thành công!');
-        }catch(\Exception $e){
-            return back()
-            ->withInput()
-            ->with('error', 'Thêm Danh mục thất bại! Lỗi: ' . $e->getMessage());
-        }
+            // upload hình ảnh (nếu có)
+            $fileName = null;
+            if ($request->hasFile('img')) {
+            $file = $request->file('img');
+            $fileName = Str::slug($request->catename)
+            . '-' . time()
+            . '.' . $file->extension();
+            // hình ảnh được lưu vào thư mục storage/app/public/categories
+            $file->storeAs('categories', $fileName, 'public');
+            }
+            Category::create([
+                'catename' => $request->catename,
+                'slug' => $request->slug,
+                'sort_order' => $request->sort_order ?? 0,
+                'status' => $request->status,
+                'description' => $request->description,
+                'image' => $fileName
+            ]);
+            return redirect()
+            ->route('admin.categories.index')
+            ->with('success', 'Thêm Danh mục thành công!');
+            }catch(\Exception $e){
+                return back()
+                ->withInput()
+                ->with('error', 'Thêm Danh mục thất bại! Lỗi: ' . $e->getMessage());
+            }
     }
 
     /**
@@ -131,11 +155,17 @@ class CategoryController extends Controller
         [
             'catename' => 'required|min:3|max:100|unique:categories,catename,' . $id.',cateid',
             'slug' => [
-            'required',
-            'min:5',
-            'max:150',
-            'regex:/^[a-z0-9-]+$/',
-            Rule::unique('categories', 'slug')->ignore($id, 'cateid'),
+                'required',
+                'min:5',
+                'max:150',
+                'regex:/^[a-z0-9-]+$/',
+                Rule::unique('categories', 'slug')->ignore($id, 'cateid'),
+                ],
+            'img' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png,webp',
+                'max:200',
             ],
             'status' => 'required|in:0,1'
         ],
@@ -146,13 +176,17 @@ class CategoryController extends Controller
             'max' => ':attribute không vượt quá :max ký tự.',
             'unique' => ':attribute đã tồn tại.',
             'slug.regex' => ':attribute chỉ được chứa chữ thường, số và dấu gạch ngang (-).',
-            'status.in' => ':attribute không hợp lệ.'
+            'status.in' => ':attribute không hợp lệ.',
+            'img.image' => ':attribute phải là hình ảnh.',
+            'img.mimes' => ':attribute chỉ chấp nhận các định dạng: jpg, jpeg, png, webp.',
+            'img.max' => ':attribute không được vượt quá 200 KB.'
         ],
         // Param 3: Attributes - tên hiển thị của các trường
         [
             'catename' => 'Tên loại',
             'slug' => 'Đường dẫn (Slug)',
-            'status' => 'Trạng thái'
+            'status' => 'Trạng thái',
+            'img'  => 'Hình ảnh'      
         ]
         );
         try {
@@ -165,13 +199,31 @@ class CategoryController extends Controller
                     ->with('error', 'Sản phẩm không tồn tại');
             }
 
+            // Có chọn hình ảnh mới
+            // Giữ tên hình ảnh cũ
+            $fileName = $categories->image;
+            if ($request->hasFile('img')) {
+            // Xóa hình ảnh cũ
+            if ($fileName) {
+            Storage::disk('public')->delete('categories/' . $categories->image);
+            }
+            // Upload hình ảnh mới
+            $file = $request->file('img');
+            $fileName = Str::slug($request->catename)
+
+            . '-' . time()
+            . '.' . $file->extension();
+            $file->storeAs('categories', $fileName, 'public');
+            }
+
             // thực hiện cập nhật sản phẩm
             $categories->update([
                 'catename' => $request->catename,
                 'slug' => $request->slug,
                 'sort_order' => $request->sort_order,
                 'status' => $request->status,
-                'description' => $request->description
+                'description' => $request->description,
+                'image' => $fileName
             ]);
 
             return redirect()
