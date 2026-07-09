@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\UserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use App\Models\User;
 
 class UserController extends Controller
@@ -64,7 +65,8 @@ class UserController extends Controller
             'gender' => $request->gender,
             'role' => $request->role,
             'birthday' => $request->birthday,
-            'status' => $request->status
+            'status' => $request->status,
+            'remember_token' => Str::random(60)
         ]);
         return redirect()
         ->route('admin.users.index')
@@ -119,7 +121,8 @@ class UserController extends Controller
                 'gender' => $request->gender,
                 'role' => $request->role,
                 'birthday' => $request->birthday,
-                'status' => $request->status
+                'status' => $request->status,
+                'remember_token' => Str::random(60)
             ]);
 
             return redirect()

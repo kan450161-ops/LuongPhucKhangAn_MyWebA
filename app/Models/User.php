@@ -30,7 +30,8 @@ class User extends Authenticatable
         'gender',
         'role',
         'birthday',
-        'status'
+        'status',
+        'remember_token'
     ];
 
     /**
