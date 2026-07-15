@@ -350,7 +350,64 @@ class ProductController extends Controller
      */
     public function destroy(string $id)
     {
-        return"Delete Product with id: $id";
+        
+        try {
+            Product::findOrFail($id)->delete();
+            return redirect()
+                ->route('admin.products.index')
+                ->with('success', 'Xóa thành công.');
+            } catch (\Exception $e) {
+
+            return redirect()
+                ->back()
+                ->with('error', 'Thực hiện thất bại.');
+        }
+    }
+
+    public function trash($limit = 10)
+    {
+        $list = Product::onlyTrashed()
+            ->with([
+                'category:cateid,catename',
+                'brand:id,brandname'
+            ])
+            ->select('id','productname','price','slug','image','status','cateid','brandid')
+            ->orderBy('productname')
+            ->paginate($limit);
+
+        return view('admin.products.trash', compact('list'));
+    }
+
+    // khôi phục dữ liệu đã xóa mềm
+    public function restore($id)
+    {
+        try {
+            Product::onlyTrashed()->findOrFail($id)->restore();
+            return redirect()
+            ->route('admin.products.trash')
+            ->with('success', 'Khôi phục thành công.');
+            } catch (\Exception $e) {
+            return redirect()
+            ->back()
+            ->with('error', 'Khôi phục thất bại.');
+        }
+    }
+
+    // xóa vĩnh viễn
+    public function forceDelete($id)
+    {
+        try {
+            Product::onlyTrashed()->findOrFail($id)->forceDelete();
+
+            return redirect()
+            ->route('admin.products.trash')
+            ->with('success', 'Xóa vĩnh viễn thành công.');
+            } catch (\Exception $e) {
+                
+            return redirect()
+            ->back()
+            ->with('error', 'Xóa thất bại.');
+        }
     }
 
     // public function test1()

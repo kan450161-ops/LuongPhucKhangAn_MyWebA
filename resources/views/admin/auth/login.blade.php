@@ -20,25 +20,26 @@
             {{-- component đã được tạo từ bài trước : resource/views/component/admin/alert.blade.php --}} -->
             <x-admin.alert></x-admin.alert>
             <div class="mb-3 mt-3">
-                <!-- {{-- Có thể đăng nhập theo username hoặc email --}} -->
-                <label for="f-username">username</label>
-                <input type="text" class="form-control" id="f-username" placeholder="nhập username"
-                    name="username" value="{{ old('username') }}" > </div>
-                <div class="mb-3">
-                    <label for="f-password">Mật khẩu</label>
-                    <input type="password" class="form-control" id="f-password"
-                        placeholder="nhập mật khẩu" name="password"
-                        value="{{ old('password') }}">
-                </div>
-                <div class="form-check mb-3">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" name="remember"> Ghi nhớ đăng nhập
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
-                <a href="{{ route('admin.forgotpass') }}">Quên mật khẩu</a>
+                <label for="f-username">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="f-username" placeholder="Nhập username"
+                    name="username" value="{{ old('username') }}">
+            </div>
+            <div class="mb-3">
+                <label for="f-password">Mật khẩu</label>
+                <input type="password" class="form-control" id="f-password"
+                    placeholder="Nhập mật khẩu" name="password">
+            </div>
+            <div class="form-check mb-3">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" name="remember"> Ghi nhớ đăng nhập
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
+            <div class="mt-3 text-center">
+                <a href="{{ route('admin.forgotpass') }}">Quên mật khẩu?</a>
+            </div>
         </form>
     </div>
 </body>
 
-</html>
+</html> 

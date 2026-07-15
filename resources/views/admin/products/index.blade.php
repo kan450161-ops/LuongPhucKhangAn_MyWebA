@@ -15,11 +15,17 @@
     <i class="bi bi-plus-circle"></i>
     Thêm sản phẩm
 </a>
+<a href="{{ route('admin.products.trash') }}" class="btn btn-danger mb-3">
+    <i class="bi bi-trash-fill"></i>
+     Thùng rác
+</a>
+
 @if(session('success')) 
     <div class="alert alert-success">
         {{ session('success') }}
     </div>
 @endif
+
 <table class="table table-bordered table-hover">
     <thead>
         <tr>
@@ -63,11 +69,19 @@
                         <i class="bi bi-pencil-square"></i>
                     </a>
 
-                    <a href="{{ route('admin.products.destroy', $item->id) }}"
-                       class="btn btn-danger btn-sm"
-                       onclick="return confirm('Bạn có chắc muốn xóa?')">
-                        <i class="bi bi-trash"></i>
-                    </a>
+                    <form action="{{ route('admin.products.destroy', $item->id) }}"
+                        method="POST"
+                        style="display:inline;"
+                        onsubmit="return confirm('Bạn có chắc muốn xóa?')">
+
+                        @csrf
+                        @method('DELETE')
+
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+                    </form>
                 </td>
             </tr>
         @empty

@@ -22,7 +22,7 @@ class UsersSeeder extends Seeder
                 'phone'      => fake()->numerify('09########'),
                 'address'    => fake()->streetAddress(),
                 'gender'     => fake()->numberBetween(0, 2),
-                'role'       => fake()->numberBetween(0, 1),
+                'role'       => fake()->numberBetween(1, 2),
                 'birthday'   => fake()->date(),
                 'status'     => fake()->numberBetween(0, 1),
                 'created_at' => now(),

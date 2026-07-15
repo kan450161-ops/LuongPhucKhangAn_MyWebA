@@ -102,16 +102,54 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('logout');
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
-        // CRUD - Resource route
+
         Route::resource('categories', CategoryController::class);
-        // ......
+            // ......
         Route::get('/change-password', [AuthController::class, 'showChangePassword'])
             ->name('change.password');
 
         Route::post('/change-password', [AuthController::class, 'changePassword'])
             ->name('change.password.post');
+
+    // CRUD - Resource route
+
+        // quản trị sẽ có quyền truy cập tất cả các route của resource
+        Route::middleware('roles:1')->group(function () {
+            Route::resource('categories', CategoryController::class);
+            Route::resource('brands', BrandController::class);
+            Route::resource('users', UserController::class);
+
+            // Hiển thị danh sách dữ liệu đã xóa mềm Soft Delete (Thùng rác)
+            Route::get('trash/products',[ProductController::class,'trash'])
+                ->name('products.trash');
+            Route::patch('products/{id}/restore', [ProductController::class, 'restore'])
+                ->name('products.restore');
+            Route::delete('products/{id}/force-delete', [ProductController::class, 'forceDelete'])
+                ->name('products.forceDelete');
+            Route::resource('products', ProductController::class);
+            
+            Route::resource('posts', PostController::class);
+        });
+        // nhân viên và quản trị sẽ có quyền truy cập các route index của resource
+        Route::middleware(['roles:1,2'])->group(function () {
+            Route::resource('categories', CategoryController::class)
+                ->only(['index']);
+            Route::resource('brands', BrandController::class)
+                ->only(['index']);
+            Route::resource('users', UserController::class)
+                ->only(['index']);
+            Route::resource('products', ProductController::class)
+                ->only(['index']);
+            Route::resource('posts', PostController::class)
+                ->only(['index']);
+
+        });  
     });
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('admin.dashboard');
+
+Route::get('/test500', function () {
+    abort(500);
+});

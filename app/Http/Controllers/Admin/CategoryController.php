@@ -23,9 +23,8 @@ class CategoryController extends Controller
     //     ->orderBy('catename') // Sắp xếp dữ liệu theo cột catename theo thứ tự tăng dần
     //     ->get(); //Lấy tất cả dữ liệu thỏa mãn điều kiện
     // == Query Builder ==
-
-        $list = Category::select('cateid','catename','slug','image','status') //Chỉ lấy các cột cần thiết
-            ->orderBy('catename') // Sắp xếp dữ liệu theo cột catename theo thứ tự tăng dần
+        $list = Category::select('cateid', 'catename','slug', 'image', 'status')
+            ->orderBy('catename')
             ->paginate($limit);
 
 

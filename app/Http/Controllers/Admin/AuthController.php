@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use App\Http\Requests\ChangePasswordRequest;
 
 
@@ -77,10 +79,53 @@ class AuthController extends Controller
     // Hiển thị trang Quên mật khẩu
     public function forgotPassword()
     {
-        return view('admin.users.forgotpassword');
+        return view('admin.auth.forgot-password');
     }
     // Xử lý quên mật khẩu
-    public function postForgotpassword(Request $request) {}
+    public function postForgotpassword(Request $request)
+    {
+        // validate - kiểm tra dữ liệu đầu vào
+        $request->validate(
+            ['email' => 'required|email'],
+            [
+                'email.required' => 'Email không được để trống',
+                'email.email' => 'Email không đúng định dạng',
+            ]
+        );
+
+        // Kiểm tra email tồn tại
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return back()
+                ->with('error', 'Email không tồn tại')
+                ->withInput();
+        }
+
+        // Tạo mật khẩu mới
+        $passrandom = Str::random(10);
+        // Mã hóa mật khẩu
+        $passencrypted = Hash::make($passrandom);
+        // Lưu vào DB
+        $user->update([
+            'password' => $passencrypted,
+        ]);
+
+        // Nội dung email
+        $html = "<h2> Mật khẩu mới của bạn là: $passrandom </h2> 
+                <p>Vui lòng đổi mật khẩu sau khi đăng nhập.</p>";
+
+        // Gửi email
+        Mail::html($html, function ($message) use ($request) {
+            $message->to($request->email)
+                ->subject('Đặt lại mật khẩu');
+        });
+
+        // điều hướng về page forgot kèm thông báo
+        return redirect()
+            ->route('admin.forgotpass')
+            ->with('message', 'Đã gửi mật khẩu mới. Bạn vui lòng kiểm tra email của bạn')
+            ->with('status', 'Đã gửi mật khẩu mới. Bạn vui lòng kiểm tra email của bạn');
+    }
 
     //change password
     public function showChangePassword()
