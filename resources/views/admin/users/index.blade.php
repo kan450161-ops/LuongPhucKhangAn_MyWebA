@@ -33,9 +33,9 @@
                     <td>{{ $item->username }}</td>
                     <td>{{ $item->email }}</td>
                     <td>
-                        @if($item->role == 2)
+                        @if($item->role == 1)
                             <span class="badge bg-primary">Quản trị</span>
-                        @elseif($item->role == 1)
+                        @elseif($item->role == 2)
                             <span class="badge bg-secondary">Người dùng</span>
                         @else
                             <span class="badge bg-warning text-dark">Khác</span>

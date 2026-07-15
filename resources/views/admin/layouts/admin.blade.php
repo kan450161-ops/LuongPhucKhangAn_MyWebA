@@ -9,11 +9,14 @@
     <title>@yield('title','My Web')</title>
 
     <!-- CDN Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
     <!-- CDN Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <!-- sử dụng css và java thong qua vite -->
+     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
 <body>
@@ -40,10 +43,11 @@
             </div>
         </div>
     </div>
+    
     <!-- CDN Bootstrap JS  -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script> -->
     <!-- nhúng file preview-image.js -->
-    <script src="{{ asset('js/preview-image.js') }}"></script>
+    <!-- <script src="{{ asset('js/preview-image.js') }}"></script> -->
 
 </body>
 
