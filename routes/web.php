@@ -1,13 +1,18 @@
 <?php
 
-use App\Http\Controllers\DemoController;
-use App\Http\Controllers\Admin\CategoryController;
-use App\Http\Controllers\Admin\ProductController;
-use App\Http\Controllers\Admin\PostController;
-use App\Http\Controllers\Admin\BrandController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\BrandController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PostController;
+use App\Http\Controllers\Admin\ProductController;
+
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Client\CartController;
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\ProductController as ClientProductController;
+use App\Http\Controllers\DemoController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -96,7 +101,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::post('/forgotpass', [AuthController::class, 'postforgotPassword'])
         ->name('forgotpass.post');
 
-    //middleware auth
+    // middleware auth
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout'])
             ->name('logout');
@@ -104,31 +109,71 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('dashboard');
 
         Route::resource('categories', CategoryController::class);
-            // ......
+        // ......
         Route::get('/change-password', [AuthController::class, 'showChangePassword'])
             ->name('change.password');
 
         Route::post('/change-password', [AuthController::class, 'changePassword'])
             ->name('change.password.post');
 
-    // CRUD - Resource route
+        // CRUD - Resource route
 
         // quản trị sẽ có quyền truy cập tất cả các route của resource
         Route::middleware('roles:1')->group(function () {
+
+            // Hiển thị danh mục dữ liệu đã xóa mềm Soft Delete (Thùng rác)
+            Route::get('trash/categories', [CategoryController::class, 'trash'])
+                ->name('categories.trash');
+            // Khôi phục
+            Route::patch('categories/{id}/restore', [CategoryController::class, 'restore'])
+                ->name('categories.restore');
+            // Xóa vĩnh viễn
+            Route::delete('categories/{id}/forcedelete', [CategoryController::class, 'forceDelete'])
+                ->name('categories.forceDelete');
             Route::resource('categories', CategoryController::class);
+
+            // Hiển thị thương hiệu dữ liệu đã xóa mềm Soft Delete (Thùng rác)
+            Route::get('trash/brands', [BrandController::class, 'trash'])
+                ->name('brands.trash');
+            // khôi phục
+            Route::patch('brands/{id}/restore', [BrandController::class, 'restore'])
+                ->name('brands.restore');
+            // xóa vĩnh viễn
+            Route::delete('brands/{id}/forcedelete', [BrandController::class, 'forceDelete'])
+                ->name('brands.forceDelete');
             Route::resource('brands', BrandController::class);
+
+            // Hiển thị người dùng dữ liệu đã xóa mềm Soft Delete (Thùng rác)
+            Route::get('trash/users', [UserController::class, 'trash'])
+                ->name('users.trash');
+            // khôi phục
+            Route::patch('users/{id}/restore', [UserController::class, 'restore'])
+                ->name('users.restore');
+            // xóa vĩnh viễn
+            Route::delete('users/{id}/forcedelete', [UserController::class, 'forceDelete'])
+                ->name('users.forceDelete');
             Route::resource('users', UserController::class);
 
             // Hiển thị danh sách dữ liệu đã xóa mềm Soft Delete (Thùng rác)
-            Route::get('trash/products',[ProductController::class,'trash'])
+            Route::get('trash/products', [ProductController::class, 'trash'])
                 ->name('products.trash');
             Route::patch('products/{id}/restore', [ProductController::class, 'restore'])
                 ->name('products.restore');
             Route::delete('products/{id}/force-delete', [ProductController::class, 'forceDelete'])
                 ->name('products.forceDelete');
             Route::resource('products', ProductController::class);
-            
+
+            // Hiển thị người dùng dữ liệu đã xóa mềm Soft Delete (Thùng rác)
+            Route::get('trash/posts', [PostController::class, 'trash'])
+                ->name('posts.trash');
+            // khôi phục
+            Route::patch('posts/{id}/restore', [PostController::class, 'restore'])
+                ->name('posts.restore');
+            // xóa vĩnh viễn
+            Route::delete('posts/{id}/forcedelete', [PostController::class, 'forceDelete'])
+                ->name('posts.forceDelete');
             Route::resource('posts', PostController::class);
+            Route::resource('orders', OrderController::class);
         });
         // nhân viên và quản trị sẽ có quyền truy cập các route index của resource
         Route::middleware(['roles:1,2'])->group(function () {
@@ -142,8 +187,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 ->only(['index']);
             Route::resource('posts', PostController::class)
                 ->only(['index']);
+            Route::resource('orders', OrderController::class)->only(['index', 'show', 'update']);
 
-        });  
+        });
     });
 });
 
@@ -152,4 +198,19 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
 
 Route::get('/test500', function () {
     abort(500);
+});
+
+Route::get('/', [HomeController::class, 'index'])->name('home');
+
+Route::get('/product/{slug}', [ClientProductController::class, 'show'])->name('products.show');
+Route::get('/brand/{slug}', [ClientProductController::class, 'brand'])->name('products.brand');
+Route::get('/category/{slug}', [ClientProductController::class, 'category'])->name('products.category');
+Route::get('/search', [ClientProductController::class, 'search'])->name('search');
+
+Route::prefix('cart')->controller(CartController::class)->name('cart.')->group(function () {
+    Route::get('/show', 'show')->name('show');
+    Route::post('/add/{id}', 'addToCart')->name('add');
+    Route::delete('/remove/{id}', 'removeCart')->name('remove');
+
+    Route::post('/checkout', 'checkout')->name('checkout');
 });

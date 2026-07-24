@@ -101,7 +101,8 @@ class PostController extends Controller
      */
     public function edit(string $id)
     {
-        $posts = Post::find($id);
+        // $posts = Post::find($id);
+         $posts = Post::find($id,['*']);
         $users = User::select('userid','fullname') -> get();
         return view('admin.posts.edit', compact('posts','users'));
     }
@@ -113,7 +114,8 @@ class PostController extends Controller
     {
         try {
             
-             $posts = Post::find($id);
+            // $posts = Post::find($id);
+            $posts = Post::find($id,['*']);
 
             if (!$posts) {
                 return redirect()
@@ -147,6 +149,58 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        return"Delete Post with id: $id";
+        try {
+            Post::findOrFail($id)->delete();
+
+            return redirect()
+                ->route('admin.posts.index')
+                ->with('success', 'Xóa bài viết thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Thực hiện thất bại.');
+        }
+    }
+
+    // hiển thị danh sách dữ liệu đã xóa mềm Soft Delete (Thùng rác)
+    public function trash($limit = 10)
+    {
+        $list = Post::onlyTrashed()
+            ->select('id', 'title', 'slug', 'content', 'image', 'status', 'user_id')
+            ->orderBy('title')
+            ->paginate($limit);
+
+        return view('admin.posts.trash', compact('list'));
+    }
+   // khôi phục dữ liệu đã xóa
+    public function restore($id)
+    {
+        try {
+            Post::onlyTrashed()->findOrFail($id)->restore();
+
+            return redirect()
+                ->route('admin.posts.trash')
+                ->with('success', 'Khôi phục thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Khôi phục thất bại.');
+        }
+    }
+
+    // xóa vĩnh viễn
+    public function forceDelete($id)
+    {
+        try {
+            Post::onlyTrashed()->findOrFail($id)->forceDelete();
+
+            return redirect()
+                ->route('admin.posts.trash')
+                ->with('success', 'Xóa vĩnh viễn thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Xóa thất bại.');
+        }
     }
 }

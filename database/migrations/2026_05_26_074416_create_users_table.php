@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('birthday')-> nullable();
             $table->tinyInteger('status')-> default(1);
             $table->rememberToken();
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }

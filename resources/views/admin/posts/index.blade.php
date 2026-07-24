@@ -7,6 +7,12 @@
     <a href="{{ route('admin.posts.create') }}" class="btn btn-success mb-3">
         + Thêm bài viết
     </a>
+    <a href="{{ route('admin.posts.trash') }}" class="btn btn-danger mb-3">
+    <i class="bi bi-trash-fill"></i>
+     Thùng rác
+</a>
+    <!-- {{-- gọi component --}} -->
+    <x-admin.alert />
 @if(session('success')) 
     <div class="alert alert-success">
         {{ session('success') }}

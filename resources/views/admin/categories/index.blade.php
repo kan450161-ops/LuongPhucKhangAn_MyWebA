@@ -15,6 +15,10 @@ tương ứng với @yield('content') trong layout -->
         <i class="bi bi-plus-circle"></i>
         Thêm loại danh mục
     </a>
+    <a href="{{ route('admin.categories.trash') }}" class="btn btn-danger mb-3">
+        <i class="bi bi-trash-fill"></i>
+        Thùng rác
+    </a>
     @if(session('success')) 
     <div class="alert alert-success">
         {{ session('success') }}

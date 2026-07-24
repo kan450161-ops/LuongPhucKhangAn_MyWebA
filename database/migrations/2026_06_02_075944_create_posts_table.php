@@ -22,6 +22,7 @@ return new class extends Migration
             $table->tinyInteger('status')->default(1);
 
             $table->unsignedInteger('user_id');
+            $table->softDeletes(); 
 
             $table->foreign('user_id')
                   ->references('userid')

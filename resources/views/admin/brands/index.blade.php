@@ -10,6 +10,10 @@
         <i class="bi bi-plus-circle"></i>
         Thêm thương hiệu
     </a>
+     <a href="{{ route('admin.brands.trash') }}" class="btn btn-danger mb-3">
+        <i class="bi bi-trash-fill"></i>
+        Thùng rác
+    </a>
     @if(session('success')) 
     <div class="alert alert-success">
         {{ session('success') }}

@@ -4,11 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UserRequest;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Models\User;
 
 class UserController extends Controller
 {
@@ -54,27 +53,28 @@ class UserController extends Controller
 
         // return redirect()->route('admin.users.index');
 
-        try{
-        User::create([
-            'fullname' => $request->fullname,
-            'username' => $request->username,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'gender' => $request->gender,
-            'role' => $request->role,
-            'birthday' => $request->birthday,
-            'status' => $request->status,
-            'remember_token' => Str::random(60)
-        ]);
-        return redirect()
-        ->route('admin.users.index')
-        ->with('success', 'Thêm Người Dùng thành công!');
-        }catch(\Exception $e){
+        try {
+            User::create([
+                'fullname' => $request->fullname,
+                'username' => $request->username,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'gender' => $request->gender,
+                'role' => $request->role,
+                'birthday' => $request->birthday,
+                'status' => $request->status,
+                'remember_token' => Str::random(60),
+            ]);
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'Thêm Người Dùng thành công!');
+        } catch (\Exception $e) {
             return back()
-            ->withInput()
-            ->with('error', 'Thêm Người dùng thất bại! Lỗi: ' . $e->getMessage());
+                ->withInput()
+                ->with('error', 'Thêm Người dùng thất bại! Lỗi: '.$e->getMessage());
         }
     }
 
@@ -83,7 +83,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        return"Show User with id: $id";
+        return "Show User with id: $id";
     }
 
     /**
@@ -91,7 +91,9 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::find($id);
+        // $user = User::find($id);
+        $user = User::find($id, ['*']);
+
         return view('admin.users.edit', compact('user'));
     }
 
@@ -102,9 +104,10 @@ class UserController extends Controller
     {
         try {
 
-            $user = User::find($id);;
+            // $user = User::find($id);
+            $user = User::find($id, ['*']);
 
-            if (!$user) {
+            if (! $user) {
                 return redirect()
                     ->route('admin.users.index')
                     ->with('error', 'Sản phẩm không tồn tại');
@@ -122,7 +125,7 @@ class UserController extends Controller
                 'role' => $request->role,
                 'birthday' => $request->birthday,
                 'status' => $request->status,
-                'remember_token' => Str::random(60)
+                'remember_token' => Str::random(60),
             ]);
 
             return redirect()
@@ -142,6 +145,58 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        return"Delete User with id: $id";
+        try {
+            User::findOrFail($id)->delete();
+
+            return redirect()
+                ->route('admin.users.index')
+                ->with('success', 'Xóa người dùng thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Thực hiện thất bại.');
+        }
+    }
+
+    // hiển thị danh sách dữ liệu đã xóa mềm Soft Delete (Thùng rác)
+    public function trash($limit = 10)
+    {
+        $list = User::onlyTrashed()
+            ->select('userid', 'fullname', 'username', 'email', 'role', 'status')
+            ->orderBy('fullname')
+            ->paginate($limit);
+
+        return view('admin.users.trash', compact('list'));
+    }
+   // khôi phục dữ liệu đã xóa
+    public function restore($id)
+    {
+        try {
+            User::onlyTrashed()->findOrFail($id)->restore();
+
+            return redirect()
+                ->route('admin.users.trash')
+                ->with('success', 'Khôi phục thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Khôi phục thất bại.');
+        }
+    }
+
+    // xóa vĩnh viễn
+    public function forceDelete($id)
+    {
+        try {
+            User::onlyTrashed()->findOrFail($id)->forceDelete();
+
+            return redirect()
+                ->route('admin.users.trash')
+                ->with('success', 'Xóa vĩnh viễn thành công.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->with('error', 'Xóa thất bại.');
+        }
     }
 }

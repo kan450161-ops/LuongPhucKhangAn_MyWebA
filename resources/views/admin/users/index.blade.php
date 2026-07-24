@@ -8,6 +8,10 @@
         <i class="bi bi-plus-circle"></i>
         Thêm người dùng
     </a>
+    <a href="{{ route('admin.users.trash') }}" class="btn btn-danger mb-3">
+    <i class="bi bi-trash-fill"></i>
+     Thùng rác
+    </a>
     <table class="table table-bordered table-hover table-striped align-middle">
         <thead class="table-dark">
             <tr>
