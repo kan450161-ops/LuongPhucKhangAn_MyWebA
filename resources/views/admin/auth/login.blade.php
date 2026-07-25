@@ -37,6 +37,7 @@
             <button type="submit" class="btn btn-primary w-100">Đăng nhập</button>
             <div class="mt-3 text-center">
                 <a href="{{ route('admin.forgotpass') }}">Quên mật khẩu?</a>
+                <a href="{{ route('register.show') }}" class="btn btn-link p-0">Đăng ký tài khoản</a>
             </div>
         </form>
     </div>

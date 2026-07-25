@@ -1,11 +1,11 @@
 @extends('client.layouts.app')
 
-@section('title', $brand->brandname)
+@section('title', $products->first()?->brand?->brandname ?? 'Thương hiệu')
 
 @section('content')
 <div class="container py-4">
     <h3 class="mb-4">
-        Thương hiệu: {{ $brand->brandname }}
+        Thương hiệu: {{ $products->first()?->brand?->brandname ?? 'Không xác định' }}
     </h3>
 
     <div class="row g-4">

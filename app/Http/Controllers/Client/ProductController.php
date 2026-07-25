@@ -4,12 +4,29 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
+    public function index(Request $request, $limit = 12)
+    {
+        $products = Product::select(
+            'id',
+            'productname',
+            'slug',
+            'price',
+            'pricediscount',
+            'image'
+        )
+            ->where('status', 1)
+            ->paginate($limit);
+
+        return view('client.product.index', compact('products'));
+    }
+
     public function show($slug)
     {
         $product = Product::select(
@@ -67,6 +84,25 @@ class ProductController extends Controller
             ->paginate($limit);
 
         return view('client.product.category', compact('products'));
+    }
+
+    public function brand($slug, $limit = 12)
+    {
+        $products = Product::select(
+            'products.id',
+            'products.productname',
+            'products.slug',
+            'products.price',
+            'products.pricediscount',
+            'products.image',
+            'brands.brandname'
+        )
+            ->join('brands', 'products.brandid', '=', 'brands.id')
+            ->where('brands.slug', $slug)
+            ->where('products.status', 1)
+            ->paginate($limit);
+
+        return view('client.product.brand', compact('products'));
     }
 
     public function search(Request $request, $limit = 12)

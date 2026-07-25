@@ -17,9 +17,11 @@ class AuthController extends Controller
     // Hiển thị trang đăng nhập
     public function login()
     {
-        // Kiểm tra đã lưu đăng nhập chưa thì chuyển đến Dashboard
+        // Kiểm tra đã lưu đăng nhập chưa thì chuyển đến trang phù hợp theo role
         if (Auth::check()) {
-            return redirect()->route('admin.dashboard');
+            return Auth::user()->role == 1
+                ? redirect()->route('admin.dashboard')
+                : redirect()->route('home');
         }
         return view('admin.auth.login');
     }
@@ -60,21 +62,27 @@ class AuthController extends Controller
         // Nếu biến $remember có giá trị true (nếu người dùng chọn nhớ tài khoản)
         $remember = $request->has('remember') ? true : false;
         Auth::login($user, $remember);
+
+        if ($user->role != 1) {
+            return redirect()->route('home')->with('success', 'Đăng nhập thành công.');
+        }
+
         // sử dụng intended để điều hướng về URL mà người dùng muốn truy cập
-        // nếu không có thì điều hướng về dasboard (route name dashboard được khai báo trong web.php)
+        // nếu không có thì điều hướng về dashboard (route name dashboard được khai báo trong web.php)
         return redirect()->intended(route('admin.dashboard'));
     }
     // Đăng xuất
     public function logout(Request $request)
     {
-        // Đăng xuất user
+        $userRole = Auth::check() ? Auth::user()->role : 2;
+
         Auth::logout();
-        // Xóa session hiện tại
         $request->session()->invalidate();
-        // Tạo lại CSRF token mới
         $request->session()->regenerateToken();
-        // Redirect về trang login
-        return redirect()->route('admin.login');
+
+        return $userRole == 1
+            ? redirect()->route('admin.login')
+            : redirect()->route('home');
     }
     // Hiển thị trang Quên mật khẩu
     public function forgotPassword()
@@ -155,5 +163,74 @@ class AuthController extends Controller
         return redirect()
             ->route('admin.change.password')
             ->with('success', 'Đổi mật khẩu thành công.');
+    }
+
+    // Hiển thị trang đăng ký (dùng chung)
+    public function showRegister()
+    {
+        return view('client.auth.register');
+    }
+
+    // Xử lý đăng ký
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'fullname' => 'required|string|max:255',
+            'username' => 'required|string|max:50|unique:users,username',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|confirmed|min:6',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+        ]);
+
+        $user = User::create([
+            'fullname' => $data['fullname'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+            'role' => 2,
+            'status' => 1,
+            'remember_token' => Str::random(60),
+        ]);
+
+        Auth::login($user);
+
+        return redirect()->route('home')->with('success', 'Đăng ký thành công.');
+    }
+
+    // Hiển thị form đăng ký cho admin (chỉ admin cấp cao mới truy cập)
+    public function showAdminRegister()
+    {
+        return view('admin.auth.register');
+    }
+
+    // Xử lý đăng ký admin (tạo user với vai trò admin)
+    public function adminRegister(Request $request)
+    {
+        $data = $request->validate([
+            'fullname' => 'required|string|max:255',
+            'username' => 'required|string|max:50|unique:users,username',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|confirmed|min:6',
+            'phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:500',
+            'role' => 'nullable|in:1,2',
+        ]);
+
+        $user = User::create([
+            'fullname' => $data['fullname'],
+            'username' => $data['username'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+            'phone' => $data['phone'] ?? null,
+            'address' => $data['address'] ?? null,
+            'role' => $data['role'] ?? 2,
+            'status' => 1,
+            'remember_token' => Str::random(60),
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', 'Tạo tài khoản admin thành công.');
     }
 }

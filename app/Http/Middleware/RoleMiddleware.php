@@ -16,9 +16,14 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (!in_array(Auth::user()->role, $roles)){
+        if (!Auth::check()) {
+            return redirect()->route('admin.login');
+        }
+
+        if (!in_array(Auth::user()->role, $roles)) {
             abort(403, 'Bạn không có quyền truy cập vào trang này');
         }
+
         return $next($request);
     }
 }

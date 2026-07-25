@@ -1,9 +1,9 @@
 @extends('client.layouts.app')
-@section('title', $products->first()?->catename)
+@section('title', $products->first()?->catename ?? 'Danh mục sản phẩm')
 @section('content')
 <div class="container py-4">
     <h3 class="mb-4">
-        Danh mục: {{ $products->first()?->catename }}
+        Danh mục: {{ $products->first()?->catename ?? 'Không có sản phẩm' }}
     </h3>
     <div class="row g-4">
         @foreach ($products as $product)

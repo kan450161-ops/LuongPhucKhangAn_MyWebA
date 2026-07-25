@@ -21,7 +21,7 @@ class HomeController extends Controller
                 'status'
             )
             ->orderByDesc('created_at')
-            ->take(4)
+            ->take(8)
             ->get();
         // Sản phẩm giảm giá (lấy 8 sản phẩm mới nhất)
         $saleProducts = Product::where('status', 1)
@@ -36,7 +36,7 @@ class HomeController extends Controller
             )
             ->where('pricediscount', '>', 0)
             ->orderByDesc('created_at')
-            ->take(4)
+            ->take(8)
             ->get();
         // Sản phẩm bán chạy (lấy 8 sản phẩm mới nhất)
         // $bestSellingProducts = Product::where('status', 1)
@@ -50,7 +50,7 @@ class HomeController extends Controller
         //     )
         //     ->where('sold', '>', 0)
         //     ->orderByDesc('sold')
-        //     ->take(4)
+        //     ->take(8)
         //     ->get();   
 
         return view('client.home.index', compact(

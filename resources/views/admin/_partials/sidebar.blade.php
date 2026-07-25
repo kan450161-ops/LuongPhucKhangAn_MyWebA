@@ -87,6 +87,13 @@
                             + Thêm người dùng
                         </a>
                     </li>
+                    @if(auth()->check() && auth()->user()->role == 1)
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('admin.register') }}">
+                            + Tạo tài khoản Admin
+                        </a>
+                    </li>
+                    @endif
                 </ul>
             </div>
         </li>

@@ -2,7 +2,7 @@
     <div class="container">
         <!-- {{-- Logo --}} -->
         <a class="navbar-brand fw-bold" href="{{ route('home') }}">
-            Mini Shop
+            King Shop
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
@@ -14,6 +14,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{{ route('home') }}">
                         Trang chủ
+                    </a>
+                </li>
+                <!-- {{-- Quản lý sản phẩm --}} -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('products.index') }}">
+                        Sản phẩm
                     </a>
                 </li>
                 <!-- {{-- Dropdown Danh mục --}} -->
@@ -46,7 +52,7 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Liên hệ</a>
+                    <a class="nav-link" href="{{ route('contact.show') }}">Liên hệ</a>
                 </li>
             </ul>
             <!-- {{-- Tìm kiếm --}} -->
@@ -62,7 +68,7 @@
                 Giỏ hàng 
                 (
                     <span class="badge bg-warning text-dark" id="cart-count">
-                        {{ count(session('cart', [])) }}
+                        {{ collect(session('cart', []))->sum('quantity') }}
                     </span>
                 )
             </a>

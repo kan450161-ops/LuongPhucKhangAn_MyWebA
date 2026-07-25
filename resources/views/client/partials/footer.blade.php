@@ -3,9 +3,9 @@
         <div class="row">
             <!-- {{-- Cột 1: --}} -->
             <div class="col-md-4 mb-4">
-                <h5>Mini Shop</h5>
+                <h5>King Shop</h5>
                 <p>
-                    Mini Shop chuyên cung cấp các sản phẩm công nghệ,
+                    King Shop chuyên cung cấp các sản phẩm công nghệ,
                     phụ kiện máy tính và thiết bị điện tử với chất lượng
                     và giá cả hợp lý.
                 </p>
@@ -39,15 +39,15 @@
             <!-- {{-- Cột 3: --}} -->
             <div class="col-md-4 mb-4">
                 <h5>Liên hệ</h5>
-                <p> 123 Nguyễn Văn A, TP. Hồ Chí Minh</p>
-                <p> 0909 999 999</p>
-                <p>✉ support@minishop.com</p>
+                <p> Địa chỉ: <strong>{{ Auth::check() ? Auth::user()->address : '123 Nguyễn Văn A, TP. Hồ Chí Minh' }}</strong></p>
+                <p> SĐT: <strong>{{ Auth::check() ? Auth::user()->phone : '0909 999 999' }}</strong></p>
+                <p>✉ Email: <strong>{{ Auth::check() ? Auth::user()->email : 'support@example.com' }}</strong></p>
             </div>
         </div>
         <hr>
         <div class="text-center">
             <small>
-                © 2026 Mini Shop. All Rights Reserved.
+                © 2026 King Shop. All Rights Reserved.
             </small>
         </div>
     </div>
